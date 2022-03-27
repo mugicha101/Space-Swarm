@@ -20,8 +20,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class Game extends Application {
+  public static final Random rand = new Random();
   public static final int borderWidth = 20;
   public static final int topMargin = 20;
   public static final int width = 800;
@@ -102,14 +104,14 @@ public class Game extends Application {
     mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
     // setup player
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 500; i++) {
       // new Cannon(Player.core);
       new Turret(Player.core);
     }
 
     // spawn test enemy
-    for (int i = 0; i < 5; i++)
-      new Enemy(50);
+    for (int i = 0; i < 50; i++)
+      new Enemy(rand.nextInt(51) + 50);
 
     // start game loop
     Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));

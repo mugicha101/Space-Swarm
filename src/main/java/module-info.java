@@ -12,4 +12,6 @@ module com.example.spaceswarm {
   exports application.sprite;
   exports application.movement;
   opens application.movement to javafx.fxml;
+  exports application.chunk;
+  opens application.chunk to javafx.fxml;
 }

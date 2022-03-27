@@ -1,13 +1,14 @@
 package application.action;
 
 import application.Core;
+import application.chunk.Chunkable;
 import application.movement.Position;
 import javafx.scene.Group;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Attack {
+public abstract class Attack extends Chunkable {
   protected static final Random rand = new Random();
   private static ArrayList<Attack> attacks = new ArrayList<>();
   public static final Group attackGroup = new Group();
@@ -39,6 +40,7 @@ public abstract class Attack {
   protected abstract void tick();
   private void kill() {
     attackGroup.getChildren().remove(group);
+    removeFromChunks();
     remove();
   }
   protected void remove() {}

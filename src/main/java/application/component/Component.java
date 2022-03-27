@@ -2,14 +2,17 @@ package application.component;
 
 import application.Core;
 import application.Game;
+import application.chunk.Chunk;
+import application.chunk.Chunkable;
 import application.movement.DirCalc;
 import application.movement.Position;
 import application.movement.Velocity;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 
 import java.util.Random;
 
-public abstract class Component {
+public abstract class Component extends Chunkable {
   public static final Group componentGroup = new Group();
   public static final Random rand = new Random();
 
@@ -24,7 +27,7 @@ public abstract class Component {
   public final Velocity velo;
   private Position targetPos;
   private Double delay;
-  protected Core parent;
+  public Core parent;
   public Component(Core parent, double radius, double health, double firerate, double range) {
     group = new Group();
     componentGroup.getChildren().add(group);
@@ -76,6 +79,7 @@ public abstract class Component {
     velo.tick();
     group.setTranslateX(velo.pos.x);
     group.setTranslateY(velo.pos.y);
+    updateChunks();
 
     // action
     if (incapacitated) {
@@ -101,5 +105,21 @@ public abstract class Component {
   protected abstract void action();
   public void remove() {
     componentGroup.getChildren().remove(group);
+    removeFromChunks();
+  }
+
+  @Override
+  protected Rectangle2D getBounds() {
+    return new Rectangle2D(velo.pos.x - radius, velo.pos.y - radius, radius * 2, radius * 2);
+  }
+
+  @Override
+  protected void chunkAdd(Chunk chunk) {
+    chunk.components.add(this);
+  }
+
+  @Override
+  protected void chunkRemove(Chunk chunk) {
+    chunk.components.remove(this);
   }
 }

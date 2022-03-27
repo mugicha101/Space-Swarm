@@ -1,9 +1,11 @@
 package application.action;
 
 import application.Core;
+import application.chunk.Chunk;
 import application.component.Component;
 import application.component.Weapon;
 import application.movement.Position;
+import javafx.geometry.Rectangle2D;
 
 public abstract class Bullet extends Attack {
   protected double dir;
@@ -27,6 +29,7 @@ public abstract class Bullet extends Attack {
     double step = Math.min(range - distTraveled, speed);
     pos.moveInDir(dir, step);
     distTraveled += step;
+    updateChunks();
 
     // visuals
     group.setRotate(-dir);
@@ -37,9 +40,24 @@ public abstract class Bullet extends Attack {
     group.setScaleY(scale);
 
     // collision
+    // TODO: add chunking system for components and bullets for more efficient collision checking
+    /*
     for (Core core : Core.cores) {
       if (core == parent) continue;
       for (Component component : core.components) {
+        if (!component.isIncapacitated() && pos.distSqd(component.velo.pos) < Math.pow(component.getRadius() + radius, 2)) {
+          component.damage(damage);
+          hit(component);
+          alive = false;
+          return;
+        }
+      }
+    }
+    */
+    for (Chunk chunk : getChunks()) {
+      for (Component component : chunk.components) {
+        if (component.parent == parent)
+          continue;
         if (!component.isIncapacitated() && pos.distSqd(component.velo.pos) < Math.pow(component.getRadius() + radius, 2)) {
           component.damage(damage);
           hit(component);
@@ -53,4 +71,19 @@ public abstract class Bullet extends Attack {
   }
 
   protected abstract void hit(Component hitComponent); // action on hit
+
+  @Override
+  protected Rectangle2D getBounds() {
+    return new Rectangle2D(pos.x - radius, pos.y - radius, radius * 2, radius * 2);
+  }
+
+  @Override
+  protected void chunkAdd(Chunk chunk) {
+    chunk.bullets.add(this);
+  }
+
+  @Override
+  protected void chunkRemove(Chunk chunk) {
+    chunk.bullets.remove(this);
+  }
 }

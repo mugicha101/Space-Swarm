@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Enemy {
   private static final double speed = 0.1;
-  private static final double maxDistFromPlayer = 5000;
+  private static final double maxDistFromPlayer = 50000;
   private static final double maxAttackingDist = 1000;
   private static final double maxEngageDist = 750;
   private static final double minLoseSightDist = 1200;
@@ -30,7 +30,7 @@ public class Enemy {
   private final Position targetPos;
   private Core targetCore;
   public Enemy(int components) {
-    this.core = new Core(Player.getPos().clone().moveInDir(rand.nextDouble() * 360, maxDistFromPlayer));
+    core = new Core(Player.getPos().clone().moveInDir(rand.nextDouble() * 360, rand.nextDouble() * maxDistFromPlayer));
     targetPos = getPos().clone();
     for (int i = 0; i < components; i++)
       new Turret(core);
