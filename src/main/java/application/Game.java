@@ -8,9 +8,12 @@ import application.movement.Position;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
@@ -33,6 +36,11 @@ public class Game extends Application {
   public static Group scrollGroup;
   public static Group guiGroup;
   public static Position camPos;
+  public static double zoom;
+  public static Position cursorPos;
+  public static Position aimPos;
+  public static Circle cursor;
+  public static boolean mouseDown;
 
   public void start(Stage stage) throws IOException {
     // setup JavaFX
@@ -48,11 +56,16 @@ public class Game extends Application {
     stage.show();
     stage.setTitle("Game");
     Game.stage = stage;
-    camPos = new Position(-width * 0.5, -height * 0.5);
 
     // setup input
     stage.getScene().setOnKeyPressed(e -> Input.keyRequest(e.getCode(), true));
     stage.getScene().setOnKeyReleased(e -> Input.keyRequest(e.getCode(), false));
+    stage.getScene().setOnScroll(e -> scrollInput(e.getDeltaY()));
+    cursorPos = new Position();
+
+    // setup camera
+    camPos = new Position();
+    zoom = 1;
 
     // setup screen regions
     mainGroup = new Group();
@@ -76,9 +89,27 @@ public class Game extends Application {
     // setup scene graph nodes
     scrollGroup.getChildren().addAll(Core.coreGroup, Component.componentGroup, Attack.attackGroup, Effect.effectGroup);
 
+    // setup mouse input
+    mainGroup.setCursor(Cursor.NONE);
+    mainGroup.setOnMouseMoved(Game::moveCursor);
+    mainGroup.setOnMouseDragged(Game::moveCursor);
+    cursor = new Circle(0, 0, 5);
+    cursor.setFill(Color.RED);
+    scrollGroup.getChildren().add(cursor);
+    aimPos = new Position();
+    mouseDown = false;
+    mainGroup.setOnMousePressed(e -> mouseDown = true);
+    mainGroup.setOnMouseReleased(e -> mouseDown = false);
+
     // setup player
-    for (int i = 0; i < 100; i++)
-      Player.addComponent(new Cannon(new Position()));
+    for (int i = 0; i < 200; i++) {
+      // new Cannon(Player.core);
+      new Turret(Player.core);
+    }
+
+    // spawn test enemy
+    for (int i = 0; i < 5; i++)
+      new Enemy(50);
 
     // start game loop
     Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
@@ -103,7 +134,10 @@ public class Game extends Application {
   private void tick() {
     screenResize();
     Player.tick();
-    moveCamera();
+    Enemy.tickEnemies();
+    Core.tickCores();
+    Attack.tickAttacks();
+    updateScroll();
   }
 
   private void toggles() {
@@ -132,11 +166,29 @@ public class Game extends Application {
     rootGroup.setTranslateY((stage.getHeight() - scaleVal * h) / 2 + borderWidth * scaleVal - topMargin);
   }
 
-  private static void moveCamera() {
-    camPos.x += (Player.getPos().x - Game.width*0.5 - camPos.x) * 0.25;
-    camPos.y += (Player.getPos().y - Game.height*0.5 - camPos.y) * 0.25;
-    scrollGroup.setTranslateX(-camPos.x);
-    scrollGroup.setTranslateY(-camPos.y);
+  private static void updateScroll() {
+    camPos.x += (Player.getPos().x - camPos.x) * 0.25;
+    camPos.y += (Player.getPos().y - camPos.y) * 0.25;
+    Scale scale = new Scale(zoom, zoom);
+    scrollGroup.getTransforms().setAll(scale);
+    scrollGroup.setTranslateX(-camPos.x*zoom + Game.width*0.5);
+    scrollGroup.setTranslateY(-camPos.y*zoom + Game.height*0.5);
+    aimPos.set((cursorPos.x - width * 0.5)/zoom + camPos.x, (cursorPos.y - height * 0.5)/zoom + camPos.y);
+    cursor.setTranslateX(aimPos.x);
+    cursor.setTranslateY(aimPos.y);
+    cursor.setScaleX(1/zoom);
+    cursor.setScaleY(1/zoom);
+  }
+
+  private static void scrollInput(double y) {
+    if (y > 0)
+      zoom *= 1.1;
+    else if (y < 0)
+      zoom /= 1.1;
+  }
+
+  private static void moveCursor(MouseEvent e) {
+    cursorPos.set(e.getX(), e.getY());
   }
 
   private static void debugRun() {

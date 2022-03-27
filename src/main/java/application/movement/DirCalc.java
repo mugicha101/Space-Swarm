@@ -1,5 +1,7 @@
 package application.movement;
 
+import application.Game;
+
 public class DirCalc {
   public static double dirTo(double x1, double y1, double x2, double y2) {
     return Math.atan2(y1 - y2, x2 - x1) * 180 / Math.PI;
@@ -14,5 +16,9 @@ public class DirCalc {
 
   public static double dirTo(Position pos) {
     return dirTo(0, 0, pos.x, pos.y);
+  }
+
+  public static double dirToAim(Position pos) {
+    return dirTo(pos, Game.aimPos);
   }
 }
