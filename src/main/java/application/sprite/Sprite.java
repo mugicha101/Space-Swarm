@@ -27,7 +27,7 @@ public abstract class Sprite {
     return sceneGroup;
   }
 
-  protected void setSceneGroup(Group sceneGroup) {
+  public void setSceneGroup(Group sceneGroup) {
     if (this.sceneGroup == sceneGroup)
       return;
     if (enabled) {
@@ -71,23 +71,25 @@ public abstract class Sprite {
   public void enable() {
     if (enabled)
       return;
-    sceneGroup.getChildren().add(iv);
+    if (sceneGroup != null) sceneGroup.getChildren().add(iv);
     enabled = true;
   }
   public void disable() {
     if (!enabled)
       return;
-    sceneGroup.getChildren().remove(iv);
+    if (sceneGroup != null) sceneGroup.getChildren().remove(iv);
     enabled = false;
   }
 
   public abstract Sprite clone();
 
-  protected Image createImage(String imgPath) throws IOException {
+  protected Image createImage(String imgPath) {
     if (!imgCache.containsKey(imgPath)) {
-      InputStream stream = new FileInputStream(basePath + imgPath);
-      imgCache.put(imgPath, new Image(stream));
-      stream.close();
+      try (InputStream stream = new FileInputStream(basePath + imgPath)) {
+        imgCache.put(imgPath, new Image(stream));
+      } catch (IOException e) {
+        throw new RuntimeException();
+      }
     }
     return imgCache.get(imgPath);
   }

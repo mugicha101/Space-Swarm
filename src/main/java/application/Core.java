@@ -18,7 +18,7 @@ public class Core {
   public static void tickCores() {
     ArrayList<Core> activeCores = new ArrayList<>();
     for (Core core : cores) {
-      if (Game.frame == 0 || core.velo.pos.distSqd(Player.getPos()) <= activeRange * activeRange) core.tick();
+      core.tick();
       if (core.isAlive())
         activeCores.add(core);
       else
@@ -52,6 +52,8 @@ public class Core {
     return false;
   }
   public void tick() {
+    if (Game.frame > 0 && velo.pos.distSqd(Player.getPos()) > activeRange * activeRange)
+      return;
     velo.tick();
     group.setTranslateX(velo.pos.x);
     group.setTranslateY(velo.pos.y);

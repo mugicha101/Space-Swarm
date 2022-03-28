@@ -13,8 +13,7 @@ public class AnimatedSprite extends Sprite {
   private Image[] imgs;
   private final int frameDelay;
 
-  public AnimatedSprite(Group sceneGroup, String[] imgPaths, double[] offset, double scale, int frameDelay)
-          throws IOException {
+  public AnimatedSprite(Group sceneGroup, String[] imgPaths, double[] offset, double scale, int frameDelay) {
     super(sceneGroup, offset, scale);
     this.frameDelay = frameDelay;
     this.alpha = 1;
@@ -22,8 +21,7 @@ public class AnimatedSprite extends Sprite {
     setImages(imgPaths);
   }
 
-  private void setImages(String[] filePaths)
-          throws IOException {
+  private void setImages(String[] filePaths) {
     imgs = new Image[filePaths.length];
     for (int i = 0; i < filePaths.length; i++) {
       imgs[i] = createImage(filePaths[i]);
@@ -37,10 +35,7 @@ public class AnimatedSprite extends Sprite {
 
   @Override
   public AnimatedSprite clone() {
-    try {
-      return new AnimatedSprite(getSceneGroup(), imgPaths, new double[] {offset[0], offset[1]}, scale, frameDelay);
-    } catch (IOException e) {
-      throw new RuntimeException();
-    }
+    return new AnimatedSprite(
+        getSceneGroup(), imgPaths, new double[] {offset[0], offset[1]}, scale, frameDelay);
   }
 }

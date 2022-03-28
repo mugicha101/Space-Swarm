@@ -47,6 +47,8 @@ public class Enemy {
     return core.isAlive();
   }
   private void tick() {
+    if (Game.frame > 0 && core.velo.pos.distSqd(Player.getPos()) > Core.activeRange * Core.activeRange)
+      return;
     if (targetCore != null && !targetCore.isAlive())
       targetCore = null;
     getVelo().add((new Position()).moveInDir(DirCalc.dirTo(getPos(), targetPos), speed));

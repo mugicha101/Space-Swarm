@@ -30,7 +30,7 @@ public class HealEffect extends Effect {
     line.setStartY(origin.y);
     line.setEndX(target.x);
     line.setEndY(target.y);
-    line.setStrokeWidth(healthPerSecond * 10 * Math.min(duration * 10, 1));
+    line.setStrokeWidth(healthPerSecond * 20 * Math.min(duration * 10, 1));
     affected.healProportion(healthPerSecond * timeMulti);
   }
 

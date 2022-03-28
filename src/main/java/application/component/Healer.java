@@ -2,15 +2,13 @@ package application.component;
 
 import application.Core;
 import application.action.HealEffect;
+import application.sprite.StaticSprite;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Healer extends Support {
   public Healer(Core parent) {
-    super(parent, 10, 120, 2, 75, 0.25);
-    Circle circle = new Circle(0, 0, 10);
-    circle.setFill(Color.YELLOW);
-    group.getChildren().add(circle);
+    super(parent, new StaticSprite(null, "components/cannon.png", new double[] {0, 0}, 0.1), 10, 120, 2, 75, 0.25);
   }
 
   @Override
@@ -22,8 +20,10 @@ public class Healer extends Support {
       double distSqd = velo.pos.distSqd(component.velo.pos);
       if (distSqd < range*range
           && (target == null
-              || ((target.incapacitated == component.incapacitated)
-                  && component.getHealthProportion() < target.getHealthProportion())
+              || ((!target.incapacitated && !component.incapacitated)
+              && component.getHealthProportion() < target.getHealthProportion())
+              || ((target.incapacitated && component.incapacitated)
+                  && component.getHealthProportion() > target.getHealthProportion())
               || (!target.incapacitated && component.incapacitated))) {
         target = component;
       }
