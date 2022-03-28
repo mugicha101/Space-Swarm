@@ -5,9 +5,13 @@ import application.chunk.Chunk;
 import application.component.Component;
 import application.component.Weapon;
 import application.movement.Position;
+import application.particle.CircleParticle;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.paint.Color;
 
 public abstract class Bullet extends Attack {
+  protected static double particleMulti = 1;
+
   protected double dir;
   protected double radius;
   protected double speed;
@@ -40,20 +44,6 @@ public abstract class Bullet extends Attack {
     group.setScaleY(scale);
 
     // collision
-    // TODO: add chunking system for components and bullets for more efficient collision checking
-    /*
-    for (Core core : Core.cores) {
-      if (core == parent) continue;
-      for (Component component : core.components) {
-        if (!component.isIncapacitated() && pos.distSqd(component.velo.pos) < Math.pow(component.getRadius() + radius, 2)) {
-          component.damage(damage);
-          hit(component);
-          alive = false;
-          return;
-        }
-      }
-    }
-    */
     for (Chunk chunk : getChunks()) {
       for (Component component : chunk.components) {
         if (component.parent == parent)
@@ -85,5 +75,13 @@ public abstract class Bullet extends Attack {
   @Override
   protected void chunkRemove(Chunk chunk) {
     chunk.bullets.remove(this);
+  }
+
+  protected void hitParticles(Color color) {
+    int amount = (int)(damage * particleMulti);
+    if (rand.nextDouble() > (damage * particleMulti - amount))
+      amount++;
+    for (int i = 0; i < amount; i++)
+      new CircleParticle(5, color, 1, pos, dir + 180 + (rand.nextDouble() * 2 - 1) * 45, speed * (0.25 + rand.nextDouble()/2), 5 + rand.nextInt(10));
   }
 }

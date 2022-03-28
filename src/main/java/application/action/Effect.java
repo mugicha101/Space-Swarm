@@ -21,7 +21,7 @@ public abstract class Effect {
   }
 
   protected final Component affected;
-  private double duration;
+  protected double duration;
   protected final Group group;
   public Effect(Component affected, double duration) {
     this.affected = affected;
@@ -30,8 +30,8 @@ public abstract class Effect {
     effects.add(this);
   }
 
-  public void tick() {
-    double tickAmount = Math.min(duration, 1);
+  public final void tick() {
+    double tickAmount = Math.min(duration, 1/60.0);
     action(tickAmount);
     duration -= tickAmount;
   }

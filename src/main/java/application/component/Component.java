@@ -7,8 +7,10 @@ import application.chunk.Chunkable;
 import application.movement.DirCalc;
 import application.movement.Position;
 import application.movement.Velocity;
+import application.particle.CircleParticle;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -28,7 +30,8 @@ public abstract class Component extends Chunkable {
   private Position targetPos;
   private Double delay;
   public Core parent;
-  public Component(Core parent, double radius, double health, double firerate, double range) {
+  private boolean passive;
+  public Component(Core parent, double radius, double health, double firerate, double range, boolean passive) {
     group = new Group();
     componentGroup.getChildren().add(group);
     this.radius = radius;
@@ -42,6 +45,7 @@ public abstract class Component extends Chunkable {
     targetPos = velo.pos.clone();
     delay = null;
     this.parent = parent;
+    this.passive = passive;
     parent.components.add(this);
   }
 
@@ -51,11 +55,16 @@ public abstract class Component extends Chunkable {
   public double getRadius() {
     return radius;
   }
+  public double getHealthProportion() {
+    return health/maxHealth;
+  }
   public void damage(double amount) {
     health -= amount;
     if (health <= 0) {
       health = 0;
       incapacitated = true;
+      for (int i = 0; i < 100; i++)
+        new CircleParticle(5, Color.RED, 1, velo.pos, rand.nextDouble() * 360, 5 + rand.nextDouble() * 20, 5 + rand.nextInt(10));
     }
   }
   public void heal(double amount) {
@@ -65,14 +74,16 @@ public abstract class Component extends Chunkable {
       incapacitated = false;
     }
   }
+  public void healProportion(double amount) {
+    heal(maxHealth * amount);
+  }
 
   public void tick() {
     // swarm movement
     Position accel = new Position();
-    double distSqd = velo.pos.distSqd(targetPos);
-    double maxDistSqd = parent.components.size() * 100;
+    double maxDistSqd = parent.components.size() * 100 + 60*60;
     accel.moveInDir(DirCalc.dirTo(velo.pos, targetPos), 0.1);
-    if (distSqd < 50*50 || parent.velo.pos.distSqd(targetPos) >= maxDistSqd) {
+    while (velo.pos.distSqd(targetPos) < 50*50 || parent.velo.pos.distSqd(targetPos) >= maxDistSqd) {
       targetPos = parent.velo.pos.clone().moveInDir(rand.nextDouble()*360, rand.nextDouble()*Math.sqrt(maxDistSqd));
     }
     velo.add(accel);
@@ -85,13 +96,15 @@ public abstract class Component extends Chunkable {
     if (incapacitated) {
       delay = null;
     } else {
-      if (delay == null && parent.attacking) {
+      if (delay == null && (parent.attacking || passive)) {
         delay = rand.nextDouble() * 60.0 / firerate;
       } else if (delay != null) delay--;
       while (delay != null && delay <= 0) {
-        if (parent.attacking) {
-          delay += 60.0 / firerate;
-          action();
+        if (parent.attacking || passive) {
+          if (action())
+            delay += 60.0 / firerate;
+          else
+            delay = 1.0;
         } else {
           delay = null;
         }
@@ -102,7 +115,7 @@ public abstract class Component extends Chunkable {
     group.setOpacity(incapacitated? 0.5 : 1);
   }
 
-  protected abstract void action();
+  protected abstract boolean action();
   public void remove() {
     componentGroup.getChildren().remove(group);
     removeFromChunks();

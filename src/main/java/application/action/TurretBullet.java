@@ -4,8 +4,6 @@ import application.Core;
 import application.component.Component;
 import application.component.Weapon;
 import application.movement.Position;
-import application.sprite.Sprite;
-import application.sprite.StaticSprite;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
@@ -23,6 +21,6 @@ public class TurretBullet extends Bullet {
 
   protected void hit(Component hitComponent) {
     // particles here
-    // hitComponent.velo.add((new Position()).moveInDir(dir, damage * speed / 100));
+    hitParticles(Color.YELLOW);
   }
 }

@@ -14,9 +14,7 @@ public class StaticSprite extends Sprite {
           throws IOException {
     super(sceneGroup, offset, scale);
     this.imgPath = imgPath;
-    InputStream stream = new FileInputStream("src/main/java/application/images/" + imgPath);
-    img = new Image(stream);
-    stream.close();
+    img = createImage(imgPath);
   }
 
   protected Image getImage() {

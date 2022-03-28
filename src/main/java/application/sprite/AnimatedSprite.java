@@ -26,10 +26,7 @@ public class AnimatedSprite extends Sprite {
           throws IOException {
     imgs = new Image[filePaths.length];
     for (int i = 0; i < filePaths.length; i++) {
-      InputStream stream = new FileInputStream("src/main/java/application/images/" + filePaths[i]);
-      Image image = new Image(stream);
-      imgs[i] = image;
-      stream.close();
+      imgs[i] = createImage(filePaths[i]);
     }
   }
 

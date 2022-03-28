@@ -12,12 +12,13 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 
 public class Core {
+  public static final double activeRange = 10000;
   public static final Group coreGroup = new Group();
   public static ArrayList<Core> cores = new ArrayList<>();
   public static void tickCores() {
     ArrayList<Core> activeCores = new ArrayList<>();
     for (Core core : cores) {
-      core.tick();
+      if (Game.frame == 0 || core.velo.pos.distSqd(Player.getPos()) <= activeRange * activeRange) core.tick();
       if (core.isAlive())
         activeCores.add(core);
       else

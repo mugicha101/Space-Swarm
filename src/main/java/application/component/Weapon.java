@@ -10,7 +10,7 @@ public abstract class Weapon extends Component {
   public double shotspeed;
   public double spread;
   public Weapon(Core parent, double radius, double health, double firerate, double range, double damage, double shotspeed, double spread) {
-    super(parent, radius, health, firerate, range);
+    super(parent, radius, health, firerate, range, false);
     this.damage = damage;
     this.shotspeed = shotspeed;
     this.spread = spread;

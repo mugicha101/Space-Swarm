@@ -5,6 +5,7 @@ import application.action.Effect;
 import application.component.*;
 import application.component.Component;
 import application.movement.Position;
+import application.particle.Particle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -89,7 +90,14 @@ public class Game extends Application {
     guiGroup.setTranslateX(width);
 
     // setup scene graph nodes
-    scrollGroup.getChildren().addAll(Core.coreGroup, Component.componentGroup, Attack.attackGroup, Effect.effectGroup);
+    scrollGroup
+        .getChildren()
+        .addAll(
+            Core.coreGroup,
+            Component.componentGroup,
+            Attack.attackGroup,
+            Effect.effectGroup,
+            Particle.particleGroup);
 
     // setup mouse input
     mainGroup.setCursor(Cursor.NONE);
@@ -104,9 +112,12 @@ public class Game extends Application {
     mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
     // setup player
-    for (int i = 0; i < 500; i++) {
-      // new Cannon(Player.core);
+    for (int i = 0; i < 50; i++) {
+      new Sniper(Player.core);
       new Turret(Player.core);
+    }
+    for (int i = 0; i < 10; i++) {
+      new Healer(Player.core);
     }
 
     // spawn test enemy
@@ -139,6 +150,8 @@ public class Game extends Application {
     Enemy.tickEnemies();
     Core.tickCores();
     Attack.tickAttacks();
+    Effect.tickEffects();
+    Particle.tickParticles();
     updateScroll();
   }
 
