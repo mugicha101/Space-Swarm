@@ -1,6 +1,6 @@
 package application;
 
-import application.component.Turret;
+import application.component.*;
 import application.movement.DirCalc;
 import application.movement.Position;
 import application.movement.Velocity;
@@ -32,8 +32,13 @@ public class Enemy {
   public Enemy(int components) {
     core = new Core(Player.getPos().clone().moveInDir(rand.nextDouble() * 360, rand.nextDouble() * maxDistFromPlayer));
     targetPos = getPos().clone();
-    for (int i = 0; i < components; i++)
-      new Turret(core);
+    for (int i = 0; i < components; i++) {
+      switch (rand.nextInt(3)) {
+        case 0 -> new Turret(core);
+        case 1 -> new Sniper(core);
+        case 2 -> new Healer(core);
+      }
+    }
     enemies.add(this);
     targetCore = null;
   }

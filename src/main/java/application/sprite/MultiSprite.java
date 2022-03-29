@@ -1,5 +1,6 @@
 package application.sprite;
 
+import application.Game;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 

@@ -2,6 +2,7 @@ package application.component;
 
 import application.Core;
 import application.Game;
+import application.Player;
 import application.chunk.Chunk;
 import application.chunk.Chunkable;
 import application.movement.DirCalc;
@@ -60,6 +61,8 @@ public abstract class Component extends Chunkable {
     parent.components.add(this);
     this.sprite.setSceneGroup(group);
     this.sprite.enable();
+    if (parent == Player.core)
+      new ComponentDisplay(this);
   }
 
   public boolean isIncapacitated() {
@@ -79,15 +82,15 @@ public abstract class Component extends Chunkable {
     if (health <= 0) {
       health = 0;
       incapacitated = true;
-      for (int i = 0; i < 100; i++)
+      for (int i = 0; i < 50; i++)
         new CircleParticle(
             5,
-            Color.RED,
+            Color.color(1, i/50.0, 0),
             1,
             velo.pos,
             rand.nextDouble() * 360,
             5 + rand.nextDouble() * 20,
-            5 + rand.nextInt(10));
+            5 + rand.nextInt(20));
     }
   }
 

@@ -29,7 +29,7 @@ public class Game extends Application {
   public static final int topMargin = 20;
   public static final int width = 800;
   public static final int height = 800;
-  public static final int guiWidth = 200;
+  public static final int guiWidth = 400;
   public static boolean debug = false;
   public static boolean paused = false;
   public static int frame = -1;
@@ -44,6 +44,7 @@ public class Game extends Application {
   public static Position aimPos;
   public static Circle cursor;
   public static boolean mouseDown;
+  public static Rectangle renderArea;
 
   public void start(Stage stage) throws IOException {
     // setup JavaFX
@@ -89,6 +90,11 @@ public class Game extends Application {
     guiGroup.getChildren().add(bg);
     guiGroup.setTranslateX(width);
 
+    // setup screen area object
+    renderArea = new Rectangle(-width*0.5, -height*0.5, width, height);
+    renderArea.setVisible(false);
+    scrollGroup.getChildren().add(renderArea);
+
     // setup scene graph nodes
     scrollGroup
         .getChildren()
@@ -98,6 +104,7 @@ public class Game extends Application {
             Attack.attackGroup,
             Effect.effectGroup,
             Particle.particleGroup);
+    guiGroup.getChildren().addAll(ComponentDisplay.componentDisplayGroup);
 
     // setup mouse input
     mainGroup.setCursor(Cursor.NONE);
@@ -116,12 +123,12 @@ public class Game extends Application {
       new Sniper(Player.core);
       new Turret(Player.core);
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 50; i++) {
       new Healer(Player.core);
     }
 
     // spawn test enemy
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 100; i++)
       new Enemy(rand.nextInt(51) + 50);
 
     // start game loop
@@ -146,13 +153,14 @@ public class Game extends Application {
 
   private void tick() {
     screenResize();
+    updateScroll();
     Player.tick();
     Enemy.tickEnemies();
     Core.tickCores();
     Attack.tickAttacks();
     Effect.tickEffects();
     Particle.tickParticles();
-    updateScroll();
+    ComponentDisplay.tickDisplays();
   }
 
   private void toggles() {
@@ -193,6 +201,13 @@ public class Game extends Application {
     cursor.setTranslateY(aimPos.y);
     cursor.setScaleX(1/zoom);
     cursor.setScaleY(1/zoom);
+    double scaledWidth = width/zoom;
+    double scaledHeight = height/zoom;
+    renderArea.setWidth(scaledWidth);
+    renderArea.setHeight(scaledHeight);
+    renderArea.setX(-scaledWidth/2+camPos.x);
+    renderArea.setY(-scaledHeight/2+camPos.y);
+    cursor.setFill(renderArea.intersects(cursor.getBoundsInParent())? Color.GREEN : Color.RED);
   }
 
   private static void scrollInput(double y) {

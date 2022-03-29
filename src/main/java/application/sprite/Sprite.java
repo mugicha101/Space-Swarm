@@ -1,5 +1,6 @@
 package application.sprite;
 
+import application.Game;
 import application.movement.Position;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -48,6 +49,10 @@ public abstract class Sprite {
     pos = new Position(0, 0);
     dir = 0;
     alpha = 1;
+  }
+
+  public final ImageView getIv() {
+    return iv;
   }
 
   protected abstract Image getImage();

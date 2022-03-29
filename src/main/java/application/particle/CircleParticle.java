@@ -1,5 +1,6 @@
 package application.particle;
 
+import application.Game;
 import application.movement.Position;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,5 +24,9 @@ public class CircleParticle extends Particle {
 
   protected void delete() {
     Particle.particleGroup.getChildren().remove(circle);
+  }
+
+  protected boolean onScreen() {
+    return Game.renderArea.intersects(circle.getBoundsInParent());
   }
 }

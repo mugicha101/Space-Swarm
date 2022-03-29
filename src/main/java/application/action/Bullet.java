@@ -1,6 +1,7 @@
 package application.action;
 
 import application.Core;
+import application.Game;
 import application.chunk.Chunk;
 import application.component.Component;
 import application.component.Weapon;
