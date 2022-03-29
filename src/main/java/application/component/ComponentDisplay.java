@@ -24,6 +24,8 @@ public class ComponentDisplay {
         return 3;
       else if (o instanceof Healer)
         return 201;
+      else if (o instanceof Reviver)
+        return 202;
       else {
         if (o instanceof Weapon)
           return 0;

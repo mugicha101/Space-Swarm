@@ -129,6 +129,7 @@ public class Game extends Application {
       new Turret(Player.core);
       new Sniper(Player.core);
       new Healer(Player.core);
+      new Reviver(Player.core);
     }
 
     // start game loop

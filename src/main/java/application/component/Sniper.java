@@ -18,7 +18,7 @@ public class Sniper extends Weapon {
   protected boolean action() {
     double dir = DirCalc.dirTo(velo.pos, parent.aimPos);
     velo.add((new Position()).moveInDir(dir, -2));
-    new SniperBullet(parent, this, velo.pos.clone(), dir);
+    new SniperBullet(parent, this, velo.pos.clone().moveInDir(dir, 4), dir);
     return true;
   }
 }

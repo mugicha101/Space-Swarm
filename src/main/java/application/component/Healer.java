@@ -4,13 +4,10 @@ import application.Core;
 import application.action.HealEffect;
 import application.sprite.StaticSprite;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-
-import java.util.ArrayList;
 
 public class Healer extends Support {
   public Healer(Core parent) {
-    super(parent, new StaticSprite(null, "components/cannon.png", new double[] {0, 0}, 0.1), 10, 100, 2, 50, 0.25);
+    super(parent, new StaticSprite(null, "components/healer.png", new double[] {0, 0}, 0.1), 10, 100, 5, 50, 0.2);
   }
 
   @Override
@@ -35,7 +32,7 @@ public class Healer extends Support {
       }
     }
     if (target != null && target.getHealthProportion() < 1) {
-      new HealEffect(target, duration, this, 0.25);
+      new HealEffect(target, duration, this, 0.2, Color.color(0, 1, 0));
       return true;
     }
     return false;

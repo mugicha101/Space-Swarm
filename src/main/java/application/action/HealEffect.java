@@ -12,12 +12,12 @@ public class HealEffect extends Effect {
   private final Component sourceComponent;
   private final Line line;
   private final double healthPerSecond;
-  public HealEffect(Component affected, double duration, Component sourceComponent, double healthPerSecond) {
+  public HealEffect(Component affected, double duration, Component sourceComponent, double healthPerSecond, Color color) {
     super(affected, duration);
     this.sourceComponent = sourceComponent;
     line = new Line(sourceComponent.velo.pos.x, sourceComponent.velo.pos.y, affected.velo.pos.x, affected.velo.pos.y);
     line.setOpacity(0.5);
-    line.setStroke(Color.color(0, 1, 0));
+    line.setStroke(color);
     effectGroup.getChildren().add(line);
     this.healthPerSecond = healthPerSecond;
   }
