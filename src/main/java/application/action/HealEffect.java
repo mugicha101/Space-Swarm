@@ -12,7 +12,8 @@ public class HealEffect extends Effect {
   private final Component sourceComponent;
   private final Line line;
   private final double healthPerSecond;
-  public HealEffect(Component affected, double duration, Component sourceComponent, double healthPerSecond, Color color) {
+  private final boolean onlyIncapacitated;
+  public HealEffect(Component affected, double duration, Component sourceComponent, double healthPerSecond, Color color, boolean onlyIncapacitated) {
     super(affected, duration);
     this.sourceComponent = sourceComponent;
     line = new Line(sourceComponent.velo.pos.x, sourceComponent.velo.pos.y, affected.velo.pos.x, affected.velo.pos.y);
@@ -20,6 +21,7 @@ public class HealEffect extends Effect {
     line.setStroke(color);
     effectGroup.getChildren().add(line);
     this.healthPerSecond = healthPerSecond;
+    this.onlyIncapacitated = onlyIncapacitated;
   }
 
   @Override
@@ -31,7 +33,7 @@ public class HealEffect extends Effect {
     line.setEndX(target.x);
     line.setEndY(target.y);
     line.setStrokeWidth(healthPerSecond * 20 * Math.min(duration * 10, 1));
-    affected.healProportion(healthPerSecond * timeMulti);
+    if (affected.isIncapacitated() || !onlyIncapacitated) affected.healProportion(healthPerSecond * timeMulti);
   }
 
   @Override

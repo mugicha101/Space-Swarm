@@ -32,7 +32,7 @@ public class Healer extends Support {
       }
     }
     if (target != null && target.getHealthProportion() < 1) {
-      new HealEffect(target, duration, this, 0.2, Color.color(0, 1, 0));
+      new HealEffect(target, duration, this, 0.2, Color.color(0, 1, 0), false);
       return true;
     }
     return false;

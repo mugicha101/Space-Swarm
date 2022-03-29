@@ -11,7 +11,8 @@ import java.util.Random;
 public class Enemy {
   public static final int minComponents = 3; // min components per enemy
   public static final double speed = 0.1;
-  private static final double maxEnemies = 30; // max alive enemies
+  private static final int maxEnemies = 30; // max alive enemies
+  private static final int maxComponents = 300; // max total enemy components
   private static final double maxDistFromPlayer =
       8000; // maximum distance the point the enemy is moving towards can be
   private static final double maxAttackingDist = 1800; // furthest distance enemy attacks from
@@ -24,22 +25,28 @@ public class Enemy {
   public static void tickEnemies() {
     // move
     ArrayList<Enemy> activeEnemies = new ArrayList<>();
+    int components = 0;
     for (Enemy e : enemies) {
       e.tick();
-      if (e.isAlive()) activeEnemies.add(e);
+      if (e.isAlive()) {
+        components += e.core.components.size();
+        activeEnemies.add(e);
+      }
     }
     enemies = activeEnemies;
 
     // spawn
-    while (enemies.size() < maxEnemies)
-      new Enemy(
-          Math.max(
+    while (components < maxComponents && enemies.size() < maxEnemies) {
+      int c = Math.max(
               minComponents,
               (int)
-                  ((1 - 10.0 / (Player.core.components.size() + 10))
-                      * (0.25 + 1.25 * Math.random())
-                      * (rand.nextDouble() < 0.01 ? 5 : 1)
-                      * Player.core.components.size())));
+                      ((1 - 10.0 / (Player.core.components.size() + 10))
+                              * (0.25 + 1.25 * Math.random())
+                              * (rand.nextDouble() < 0.01 ? 5 : 1)
+                              * Player.core.components.size()));
+      new Enemy(c);
+      components += c;
+      }
   }
 
   private Core core;

@@ -217,7 +217,7 @@ public class Game extends Application {
   private static void scrollInput(double y) {
     if (y > 0) {
       zoomMulti *= 1.1;
-      if (zoomMulti > 5)
+      if (zoomMulti * zoomLevel > 5)
         zoomMulti /= 1.1;
     } else if (y < 0) {
       zoomMulti /= 1.1;

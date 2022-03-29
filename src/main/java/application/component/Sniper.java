@@ -11,14 +11,14 @@ import javafx.scene.shape.Circle;
 
 public class Sniper extends Weapon {
   public Sniper(Core parent) {
-    super(parent, new StaticSprite(null, "components/sniper.png", new double[] {0, 0}, 0.1),10, 80, 0.5, 1800, 25, 25, 1);
+    super(parent, new StaticSprite(null, "components/sniper.png", new double[] {0, 0}, 0.1),10, 80, 0.25, 1800, 50, 25, 1);
   }
 
   @Override
   protected boolean action() {
     double dir = DirCalc.dirTo(velo.pos, parent.aimPos);
     velo.add((new Position()).moveInDir(dir, -2));
-    new SniperBullet(parent, this, velo.pos.clone().moveInDir(dir, 4), dir);
+    new SniperBullet(parent, this, velo.pos.clone().moveInDir(dir, 4), dir, velo);
     return true;
   }
 }

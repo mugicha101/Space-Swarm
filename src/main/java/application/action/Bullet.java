@@ -6,6 +6,7 @@ import application.chunk.Chunk;
 import application.component.Component;
 import application.component.Weapon;
 import application.movement.Position;
+import application.movement.Velocity;
 import application.particle.CircleParticle;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
@@ -19,7 +20,9 @@ public abstract class Bullet extends Attack {
   protected double damage;
   protected double range;
   private double distTraveled;
-  public Bullet(Core parentCore, Weapon parentWeapon, Position pos, double radius, double dir, double speedMulti, double rangeMulti, double damageMulti, double spreadMulti) {
+  private final double driftX;
+  private final double driftY;
+  public Bullet(Core parentCore, Weapon parentWeapon, Position pos, double radius, double dir, Velocity sourceVelo, double speedMulti, double rangeMulti, double damageMulti, double spreadMulti) {
     super(parentCore, pos);
     this.dir = dir + (rand.nextDouble() * 2 - 1) * parentWeapon.spread * spreadMulti;
     this.radius = radius;
@@ -27,12 +30,15 @@ public abstract class Bullet extends Attack {
     range = parentWeapon.range * rangeMulti;
     damage = parentWeapon.damage * damageMulti;
     distTraveled = 0;
+    driftX = sourceVelo.x;
+    driftY = sourceVelo.y;
   }
 
   protected void tick() {
     // movement
     double step = Math.min(range - distTraveled, speed);
     pos.moveInDir(dir, step);
+    pos.move(driftX, driftY);
     distTraveled += step;
     updateChunks();
 
