@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
 
 public class Sniper extends Weapon {
   public Sniper(Core parent) {
-    super(parent, new StaticSprite(null, "components/sniper.png", new double[] {0, 0}, 0.1),10, 80, 0.5, 1200, 20, 25, 3);
+    super(parent, new StaticSprite(null, "components/sniper.png", new double[] {0, 0}, 0.1),10, 80, 0.5, 1800, 25, 25, 1);
   }
 
   @Override

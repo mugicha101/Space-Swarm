@@ -12,6 +12,7 @@ import application.particle.CircleParticle;
 import application.sprite.Sprite;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
@@ -32,8 +33,8 @@ public abstract class Component extends Chunkable {
   public final Velocity velo;
   private Position targetPos;
   private Double delay;
-  public Core parent;
-  private boolean passive;
+  protected Core parent;
+  private final boolean passive;
 
   public Component(
       Core parent,
@@ -77,7 +78,19 @@ public abstract class Component extends Chunkable {
     return health / maxHealth;
   }
 
-  public void damage(double amount) {
+  public boolean parentMatches(Core core) {
+    return parent == core;
+  }
+
+  public void setParent(Core core) { // note: does not remove from previous parent (must do manuallY)
+    parent = core;
+    core.components.add(this);
+    if (core == Player.core)
+      new ComponentDisplay(this);
+  }
+
+  public void damage(double amount, Core source) {
+    double oldHealth = health;
     health -= amount;
     if (health <= 0) {
       health = 0;
@@ -92,12 +105,13 @@ public abstract class Component extends Chunkable {
             5 + rand.nextDouble() * 20,
             5 + rand.nextInt(20));
     }
+    parent.addDamage(oldHealth - health, source == Player.core);
   }
 
   public void heal(double amount) {
     health += amount;
     if (health >= maxHealth) {
-      health = maxHealth;
+      health = incapacitated? maxHealth * 0.5 : maxHealth;
       incapacitated = false;
     }
   }
@@ -142,6 +156,8 @@ public abstract class Component extends Chunkable {
         }
       }
     }
+    if (incapacitated)
+      healProportion(0.01/60);
 
     // visuals
     sprite.dir =
@@ -149,7 +165,7 @@ public abstract class Component extends Chunkable {
             ? DirCalc.dirTo(velo.x, velo.y)
             : DirCalc.dirTo(velo.pos, parent.aimPos);
     sprite.drawUpdate();
-    group.setOpacity(incapacitated ? 0.5 : 1);
+    group.setOpacity(incapacitated? 0.5 : 1);
   }
 
   protected abstract boolean action();

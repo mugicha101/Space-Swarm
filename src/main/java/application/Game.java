@@ -2,6 +2,7 @@ package application;
 
 import application.action.Attack;
 import application.action.Effect;
+import application.action.SniperBullet;
 import application.component.*;
 import application.component.Component;
 import application.movement.Position;
@@ -40,6 +41,8 @@ public class Game extends Application {
   public static Group guiGroup;
   public static Position camPos;
   public static double zoom;
+  public static double zoomLevel;
+  public static double zoomMulti;
   public static Position cursorPos;
   public static Position aimPos;
   public static Circle cursor;
@@ -70,6 +73,8 @@ public class Game extends Application {
     // setup camera
     camPos = new Position();
     zoom = 1;
+    zoomMulti = 1;
+    zoomLevel = 1;
 
     // setup screen regions
     mainGroup = new Group();
@@ -104,14 +109,15 @@ public class Game extends Application {
             Attack.attackGroup,
             Effect.effectGroup,
             Particle.particleGroup);
-    guiGroup.getChildren().addAll(ComponentDisplay.componentDisplayGroup);
+    guiGroup.getChildren().addAll(ComponentDisplay.componentDisplayGroup, LevelManager.barGroup);
 
     // setup mouse input
     mainGroup.setCursor(Cursor.NONE);
     mainGroup.setOnMouseMoved(Game::moveCursor);
     mainGroup.setOnMouseDragged(Game::moveCursor);
     cursor = new Circle(0, 0, 5);
-    cursor.setFill(Color.RED);
+    cursor.setStrokeWidth(2);
+    cursor.setFill(Color.TRANSPARENT);
     scrollGroup.getChildren().add(cursor);
     aimPos = new Position();
     mouseDown = false;
@@ -119,17 +125,11 @@ public class Game extends Application {
     mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
     // setup player
-    for (int i = 0; i < 50; i++) {
-      new Sniper(Player.core);
+    for (int i = 0; i < 2; i++) {
       new Turret(Player.core);
-    }
-    for (int i = 0; i < 50; i++) {
+      new Sniper(Player.core);
       new Healer(Player.core);
     }
-
-    // spawn test enemy
-    for (int i = 0; i < 100; i++)
-      new Enemy(rand.nextInt(51) + 50);
 
     // start game loop
     Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
@@ -161,6 +161,7 @@ public class Game extends Application {
     Effect.tickEffects();
     Particle.tickParticles();
     ComponentDisplay.tickDisplays();
+    LevelManager.tick();
   }
 
   private void toggles() {
@@ -207,14 +208,21 @@ public class Game extends Application {
     renderArea.setHeight(scaledHeight);
     renderArea.setX(-scaledWidth/2+camPos.x);
     renderArea.setY(-scaledHeight/2+camPos.y);
-    cursor.setFill(renderArea.intersects(cursor.getBoundsInParent())? Color.GREEN : Color.RED);
+    cursor.setStroke(mouseDown? Color.RED : Color.WHITE);
+    zoomLevel = 1/Math.sqrt(Player.core.components.size());
+    zoom = zoomMulti * zoomLevel;
   }
 
   private static void scrollInput(double y) {
-    if (y > 0)
-      zoom *= 1.1;
-    else if (y < 0)
-      zoom /= 1.1;
+    if (y > 0) {
+      zoomMulti *= 1.1;
+      if (zoomMulti > 5)
+        zoomMulti /= 1.1;
+    } else if (y < 0) {
+      zoomMulti /= 1.1;
+      if (zoomMulti < 1)
+        zoomMulti = 1;
+    }
   }
 
   private static void moveCursor(MouseEvent e) {

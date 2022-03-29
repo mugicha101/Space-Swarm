@@ -43,8 +43,8 @@ public class ComponentDisplay {
   public static final Group componentDisplayGroup = new Group();
   public static final ArrayList<ComponentDisplay> displayList = new ArrayList<>();
   public static final int rowLength = 10;
-  public static final double hMargin = 15;
-  public static final double vMargin = 15;
+  public static final double hMargin = 20;
+  public static final double vMargin = 20;
   public static final double spacing = 50;
   public static final double healthBarWidth = 35;
   public static final double healthBarHeight = 3;
@@ -58,22 +58,21 @@ public class ComponentDisplay {
     }
     for (int i = 0; i < displayList.size(); i++)
       displayList.get(i).tick(i);
-    componentDisplayGroup.setTranslateX(hMargin);
-    componentDisplayGroup.setTranslateY(vMargin);
     double width = getPos(rowLength-1).x;
     double height = getPos(displayList.size()-1).y;
     double scaledWidth = Game.guiWidth - hMargin * 2;
-    double scaledHeight = Game.height - vMargin * 2;
+    double scaledHeight = Game.height * 0.5 - vMargin * 2;
     double scale = Math.min(scaledWidth/width, scaledHeight/height);
     Scale scaleTransform = new Scale(scale, scale, 0, 0);
     componentDisplayGroup.getTransforms().setAll(scaleTransform);
+    componentDisplayGroup.setTranslateX(hMargin + (scaledWidth - width * scale) * 0.5);
+    componentDisplayGroup.setTranslateY(vMargin);
   }
 
   private final Component component;
   private final Group group;
   private final Sprite sprite;
   private final Position pos;
-  private final ColorAdjust colorAdjust;
   private final Group healthBarGroup;
   private final Rectangle healthBarContainer;
   private final Rectangle healthBar;
@@ -88,8 +87,6 @@ public class ComponentDisplay {
     pos = new Position();
     sprite.enable();
     displayList.add(this);
-    colorAdjust = new ColorAdjust();
-    sprite.getIv().setEffect(colorAdjust);
     healthBarGroup = new Group();
     healthBarContainer = new Rectangle(-healthBarWidth/2 - healthBarBorder, healthBarOffset - healthBarBorder, healthBarWidth + healthBarBorder * 2, healthBarHeight + healthBarBorder * 2);
     healthBar = new Rectangle(0, healthBarOffset, healthBarWidth, healthBarHeight);
@@ -118,6 +115,6 @@ public class ComponentDisplay {
     double health = Math.max(Math.min(component.getHealthProportion(), 1), 0);
     healthBarScale.setX(health);
     healthBar.setFill(component.incapacitated? Color.color(0.5 + health * 0.5, 0.5 + health * 0.5, 0.5 + health * 0.5) : Color.hsb(Math.pow(health, 1.5) * 120, 1, 1));
-    colorAdjust.setBrightness(component.incapacitated? -0.5 : 0);
+    group.setOpacity(component.incapacitated? 0.5 : 1);
   }
 }

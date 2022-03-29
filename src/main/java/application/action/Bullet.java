@@ -47,10 +47,10 @@ public abstract class Bullet extends Attack {
     // collision
     for (Chunk chunk : getChunks()) {
       for (Component component : chunk.components) {
-        if (component.parent == parent)
+        if (component.parentMatches(parent))
           continue;
         if (!component.isIncapacitated() && pos.distSqd(component.velo.pos) < Math.pow(component.getRadius() + radius, 2)) {
-          component.damage(damage);
+          component.damage(damage, parent);
           hit(component);
           alive = false;
           return;
