@@ -23,5 +23,6 @@ public class TurretBullet extends Bullet {
   protected void hit(Component hitComponent) {
     // particles here
     hitParticles(Color.YELLOW);
+    hitComponent.velo.add((new Position()).moveInDir(dir, damage * speed / 500));
   }
 }

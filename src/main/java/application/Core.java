@@ -6,13 +6,16 @@ import application.component.Component;
 import application.movement.DirCalc;
 import application.movement.Position;
 import application.movement.Velocity;
+import application.particle.CircleParticle;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Core {
+  private static final Random rand = new Random();
   public static final double activeRange = 10000;
   public static final double minSpawnDist = 1000;
   public static final Group coreGroup = new Group();
@@ -70,7 +73,20 @@ public class Core {
     for (Component component : components) component.velo.pos.set(velo.pos);
   }
 
-  public void remove() {
+  public void remove(boolean silent) {
+    if (!silent) {
+      Sound.play("thump.wav", 1, 0.5, 0.25, this == Player.core? null : velo.pos);
+      for (Component component : components)
+        for (int i = 0; i < 25; i++)
+          new CircleParticle(
+                  5,
+                  Color.color(1, i/25.0, 0),
+                  1,
+                  component.velo.pos,
+                  rand.nextDouble() * 360,
+                  5 + rand.nextDouble() * 20,
+                  20 + rand.nextInt(80));
+    }
     coreGroup.getChildren().remove(group);
     for (Component component : components) {
       if (Math.random() <= playerDamage / (playerDamage + otherDamage))
@@ -80,6 +96,9 @@ public class Core {
     }
     LevelManager.addXP(components.size() * playerDamage / (playerDamage + otherDamage));
     if (this != Player.core) components.clear();
+  }
+  public void remove() {
+    remove(false);
   }
 
   public void addDamage(double amount, boolean fromPlayer) {

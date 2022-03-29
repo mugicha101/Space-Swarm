@@ -3,6 +3,7 @@ package application.component;
 import application.Core;
 import application.Game;
 import application.Player;
+import application.Sound;
 import application.chunk.Chunk;
 import application.chunk.Chunkable;
 import application.movement.DirCalc;
@@ -104,6 +105,9 @@ public abstract class Component extends Chunkable {
             rand.nextDouble() * 360,
             5 + rand.nextDouble() * 20,
             5 + rand.nextInt(20));
+      Sound.play("shot3.wav", 0.5, 0.5, 0.25, parent == Player.core? null : velo.pos);
+    } else {
+      Sound.play("tap.wav", 0.1 * Math.sqrt(amount), 0.5, 0.25, parent == Player.core? null : velo.pos);
     }
     parent.addDamage(oldHealth - health, source == Player.core);
   }

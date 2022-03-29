@@ -210,7 +210,7 @@ public class Game extends Application {
     renderArea.setX(-scaledWidth/2+camPos.x);
     renderArea.setY(-scaledHeight/2+camPos.y);
     cursor.setStroke(mouseDown? Color.RED : Color.WHITE);
-    zoomLevel = 1/Math.sqrt(Player.core.components.size());
+    zoomLevel = 5/(5 + Math.sqrt(Player.core.components.size()));
     zoom = zoomMulti * zoomLevel;
   }
 

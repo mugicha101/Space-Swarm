@@ -1,5 +1,6 @@
 package application.particle;
 
+import application.Game;
 import application.movement.Position;
 import javafx.scene.Group;
 

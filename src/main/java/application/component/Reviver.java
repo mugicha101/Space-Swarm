@@ -22,7 +22,7 @@ public class Reviver extends Support {
       }
     }
     if (target != null) {
-      new HealEffect(target, duration, this, 0.5, Color.color(0.8, 0, 1), true);
+      new HealEffect(target, duration, this, 0.25, Color.color(0.8, 0, 1), true);
       return true;
     }
     return false;

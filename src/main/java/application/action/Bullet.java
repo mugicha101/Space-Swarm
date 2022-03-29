@@ -12,7 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 
 public abstract class Bullet extends Attack {
-  protected static double particleMulti = 1;
+  protected static double particleMulti = 0.25;
 
   protected double dir;
   protected double radius;
