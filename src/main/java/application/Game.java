@@ -136,6 +136,9 @@ public class Game extends Application {
     Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
     tl.setCycleCount(Timeline.INDEFINITE);
     tl.play();
+
+    // music
+    Sound.initMusic();
   }
 
   private void run() {
