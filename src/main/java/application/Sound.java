@@ -28,7 +28,7 @@ public class Sound {
             audioMap.put(path, new AudioClip(Paths.get(basePath + path).toUri().toString()));
         }
         AudioClip audio = audioMap.get(path);
-        double balance = pos == null? 0 : (Player.getPos().moveInDir(DirCalc.dirTo(pos), 1).x);
+        double balance = pos == null? 0 : (Player.getPos().clone().moveInDir(DirCalc.dirTo(pos), 1).x);
         double rate = pitch * (1 + (Math.random() * 2 - 1) * pitchVariance);
         int priority = (int)(volume * 10000);
         audio.play(volume, balance, rate, 0, priority);

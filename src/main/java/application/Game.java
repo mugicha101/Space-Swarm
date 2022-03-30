@@ -105,6 +105,7 @@ public class Game extends Application {
         .getChildren()
         .addAll(
             Core.coreGroup,
+            Star.starGroup,
             Component.componentGroup,
             Attack.attackGroup,
             Effect.effectGroup,
@@ -138,7 +139,10 @@ public class Game extends Application {
     for (int i = 0; i < 2; i++)
       new Healer(Player.core);
 
-    // music
+    // setup background
+    Star.init();
+
+    // setup music
     Sound.initMusic();
 
     // start game loop
@@ -171,6 +175,7 @@ public class Game extends Application {
     Effect.tickEffects();
     Particle.tickParticles();
     Chunk.tick();
+    Star.tickStars();
 
     ComponentDisplay.tickDisplays();
     LevelManager.tick();

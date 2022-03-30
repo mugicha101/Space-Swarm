@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 
 public class LevelManager {
+  public static double totalXP = 0;
   public static double nextLevelXP = 5;
   public static double xp = 0;
   public static double level = 0;
@@ -18,14 +19,18 @@ public class LevelManager {
   public static final Rectangle bar = new Rectangle(0, -barHeight/2, barLength, barHeight);
   public static final Scale scale = new Scale();
   private static int pendingLevels = 0;
+  private static double vTotalXP = totalXP;
+  private static double vNextLevelXP = nextLevelXP;
+  private static double vXP = xp;
+  private static double vLevel = level;
 
   public static void addXP(double amount) {
     xp += amount;
+    totalXP += amount;
     while (xp >= nextLevelXP) {
       xp -= nextLevelXP;
-      nextLevelXP *= 1.1;
+      nextLevelXP += 1 + nextLevelXP * 0.05;
       level++;
-      pendingLevels++;
     }
   }
   public static void tick() {
@@ -38,7 +43,16 @@ public class LevelManager {
       barGroup.setTranslateY(Game.height * 0.6);
       barGroup.setTranslateX(Game.guiWidth * 0.5);
     }
-    scale.setX(xp/nextLevelXP);
+    double vXPChange = Math.min((totalXP - vTotalXP) * 0.1, vNextLevelXP * 0.5);
+    vXP += vXPChange;
+    vTotalXP += vXPChange;
+    while (vXP >= vNextLevelXP) {
+      vXP -= vNextLevelXP;
+      vNextLevelXP += 1 + vNextLevelXP * 0.05;
+      vLevel++;
+      pendingLevels++;
+    }
+    scale.setX(vXP/vNextLevelXP);
     if (pendingLevels > 0 && !ComponentSelect.isActive()) {
       ComponentSelect.activate();
       pendingLevels--;
