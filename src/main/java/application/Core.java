@@ -88,12 +88,8 @@ public class Core {
                   20 + rand.nextInt(80));
     }
     coreGroup.getChildren().remove(group);
-    for (Component component : components) {
-      if (Math.random() <= playerDamage / (playerDamage + otherDamage))
-        component.setParent(Player.core);
-      else
-        component.remove();
-    }
+    for (Component component : components)
+     component.remove();
     LevelManager.addXP(components.size() * playerDamage / (playerDamage + otherDamage));
     if (this != Player.core) components.clear();
   }

@@ -1,6 +1,6 @@
 package application;
 
-import application.component.ComponentFactory;
+import application.component.ComponentSelect;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +17,7 @@ public class LevelManager {
   public static final Rectangle barContainer = new Rectangle(-barLength/2 - barBorder, -barHeight/2 - barBorder, barLength + barBorder * 2, barHeight + barBorder * 2);
   public static final Rectangle bar = new Rectangle(0, -barHeight/2, barLength, barHeight);
   public static final Scale scale = new Scale();
+  private static int pendingLevels = 0;
 
   public static void addXP(double amount) {
     xp += amount;
@@ -24,7 +25,7 @@ public class LevelManager {
       xp -= nextLevelXP;
       nextLevelXP *= 1.1;
       level++;
-      // ComponentFactory.create(Player.core);
+      pendingLevels++;
     }
   }
   public static void tick() {
@@ -34,9 +35,13 @@ public class LevelManager {
       barGroup.getChildren().addAll(barContainer, bar);
       barContainer.setFill(Color.BLACK);
       bar.setFill(Color.color(0, 1, 1));
-      barGroup.setTranslateY(Game.height * 0.5);
+      barGroup.setTranslateY(Game.height * 0.6);
       barGroup.setTranslateX(Game.guiWidth * 0.5);
     }
     scale.setX(xp/nextLevelXP);
+    if (pendingLevels > 0 && !ComponentSelect.isActive()) {
+      ComponentSelect.activate();
+      pendingLevels--;
+    }
   }
 }

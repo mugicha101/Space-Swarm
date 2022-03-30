@@ -169,7 +169,7 @@ public abstract class Component extends Chunkable {
             ? DirCalc.dirTo(velo.x, velo.y)
             : DirCalc.dirTo(velo.pos, parent.aimPos);
     sprite.drawUpdate();
-    group.setOpacity(incapacitated? 0.5 : 1);
+    group.setOpacity(incapacitated? 0.25 : 1);
   }
 
   protected abstract boolean action();

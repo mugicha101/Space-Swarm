@@ -2,7 +2,7 @@ package application;
 
 import application.action.Attack;
 import application.action.Effect;
-import application.action.SniperBullet;
+import application.chunk.Chunk;
 import application.component.*;
 import application.component.Component;
 import application.movement.Position;
@@ -109,7 +109,13 @@ public class Game extends Application {
             Attack.attackGroup,
             Effect.effectGroup,
             Particle.particleGroup);
-    guiGroup.getChildren().addAll(ComponentDisplay.componentDisplayGroup, LevelManager.barGroup);
+
+    guiGroup
+        .getChildren()
+        .addAll(
+            ComponentDisplay.componentDisplayGroup,
+            LevelManager.barGroup,
+            ComponentSelect.selectGroup);
 
     // setup mouse input
     mainGroup.setCursor(Cursor.NONE);
@@ -125,20 +131,20 @@ public class Game extends Application {
     mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
     // setup player
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
       new Turret(Player.core);
       new Sniper(Player.core);
-      new Healer(Player.core);
-      new Reviver(Player.core);
     }
+    for (int i = 0; i < 2; i++)
+      new Healer(Player.core);
+
+    // music
+    Sound.initMusic();
 
     // start game loop
     Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
     tl.setCycleCount(Timeline.INDEFINITE);
     tl.play();
-
-    // music
-    Sound.initMusic();
   }
 
   private void run() {
@@ -164,8 +170,11 @@ public class Game extends Application {
     Attack.tickAttacks();
     Effect.tickEffects();
     Particle.tickParticles();
+    Chunk.tick();
+
     ComponentDisplay.tickDisplays();
     LevelManager.tick();
+    ComponentSelect.tick();
   }
 
   private void toggles() {

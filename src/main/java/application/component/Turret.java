@@ -11,7 +11,7 @@ import application.sprite.*;
 public class Turret extends Weapon {
   private int side;
   public Turret(Core parent) {
-    super(parent, new StaticSprite(null, "components/turret.png", new double[] {0, 0}, 0.1), 10, 100, 1.5, 1200, 20, 10, 15);
+    super(parent, new StaticSprite(null, "components/turret.png", new double[] {0, 0}, 0.1), 10, 100, 2, 1200, 20, 15, 15);
     side = 1;
   }
 

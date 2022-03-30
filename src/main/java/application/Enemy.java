@@ -12,7 +12,7 @@ public class Enemy {
   public static final int minComponents = 3; // min components per enemy
   public static final double speed = 0.1;
   private static final int maxEnemies = 30; // max alive enemies
-  private static final int maxComponents = 300; // max total enemy components
+  private static final int maxComponents = 350; // max total enemy components
   private static final double maxDistFromPlayer =
       8000; // maximum distance the point the enemy is moving towards can be
   private static final double maxAttackingDist = 1800; // furthest distance enemy attacks from

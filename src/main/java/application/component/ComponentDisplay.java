@@ -44,9 +44,9 @@ public class ComponentDisplay {
   }
   public static final Group componentDisplayGroup = new Group();
   public static final ArrayList<ComponentDisplay> displayList = new ArrayList<>();
-  public static final int rowLength = 10;
-  public static final double hMargin = 20;
-  public static final double vMargin = 20;
+  public static final int minRowLength = 5;
+  public static final double hMargin = 30;
+  public static final double vMargin = 30;
   public static final double spacing = 50;
   public static final double healthBarWidth = 35;
   public static final double healthBarHeight = 3;
@@ -60,7 +60,7 @@ public class ComponentDisplay {
     }
     for (int i = 0; i < displayList.size(); i++)
       displayList.get(i).tick(i);
-    double width = getPos(rowLength-1).x;
+    double width = getPos(getRowLength()-1).x;
     double height = getPos(displayList.size()-1).y;
     double scaledWidth = Game.guiWidth - hMargin * 2;
     double scaledHeight = Game.height * 0.5 - vMargin * 2;
@@ -103,7 +103,12 @@ public class ComponentDisplay {
     reSort = true;
   }
 
+  private static int getRowLength() {
+    return  Math.max(minRowLength, (int)Math.ceil(Math.sqrt(displayList.size())));
+  }
+
   private static Position getPos(int index) {
+    int rowLength = getRowLength();
     double x = (index % rowLength) * spacing;
     double y = (double)(index / rowLength) * spacing;
     return new Position(x, y);
