@@ -8,7 +8,7 @@ import javafx.scene.transform.Scale;
 
 public class LevelManager {
   public static double totalXP = 0;
-  public static double nextLevelXP = 0;
+  public static double nextLevelXP = 5;
   public static double xp = 0;
   public static double level = 0;
   public static final double barLength = Game.guiWidth * 0.8;
