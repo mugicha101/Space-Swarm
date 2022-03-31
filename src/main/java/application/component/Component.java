@@ -1,7 +1,6 @@
 package application.component;
 
 import application.Core;
-import application.Game;
 import application.Player;
 import application.Sound;
 import application.chunk.Chunk;
@@ -13,7 +12,6 @@ import application.particle.CircleParticle;
 import application.sprite.Sprite;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 
 import java.util.Random;

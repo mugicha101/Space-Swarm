@@ -1,10 +1,8 @@
 package application.sprite;
 
-import application.Game;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 // com.example.spaceswarm.sprite that can toggle between different sprites

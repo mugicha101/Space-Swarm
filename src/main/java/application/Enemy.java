@@ -40,7 +40,7 @@ public class Enemy {
       int c = Math.max(
               minComponents,
               (int)
-                      ((1 - 10.0 / (Player.core.components.size() + 10))
+                      ((1 - 20.0 / (Player.core.components.size() + 20))
                               * (0.25 + 1.25 * Math.random())
                               * (rand.nextDouble() < 0.01 ? 5 : 1)
                               * Player.core.components.size()));

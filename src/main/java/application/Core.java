@@ -1,7 +1,5 @@
 package application;
 
-import application.Game;
-import application.Player;
 import application.component.Component;
 import application.movement.DirCalc;
 import application.movement.Position;
@@ -9,7 +7,6 @@ import application.movement.Velocity;
 import application.particle.CircleParticle;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.Random;

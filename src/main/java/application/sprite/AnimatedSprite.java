@@ -4,10 +4,6 @@ import application.Game;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class AnimatedSprite extends Sprite {
   private final String[] imgPaths;
   private Image[] imgs;

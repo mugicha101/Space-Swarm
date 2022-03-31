@@ -4,7 +4,6 @@ import application.Game;
 import application.movement.Position;
 import application.sprite.Sprite;
 import javafx.scene.Group;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;

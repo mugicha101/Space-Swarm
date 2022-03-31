@@ -8,8 +8,8 @@ import javafx.scene.transform.Scale;
 
 public class LevelManager {
   public static double totalXP = 0;
-  public static double nextLevelXP = 5;
-  public static double xp = 0;
+  public static double nextLevelXP = 0;
+  public static double xp = 10;
   public static double level = 0;
   public static final double barLength = Game.guiWidth * 0.8;
   public static final double barHeight = 10;
@@ -17,7 +17,6 @@ public class LevelManager {
   public static final Group barGroup = new Group();
   public static final Rectangle barContainer = new Rectangle(-barLength/2 - barBorder, -barHeight/2 - barBorder, barLength + barBorder * 2, barHeight + barBorder * 2);
   public static final Rectangle bar = new Rectangle(0, -barHeight/2, barLength, barHeight);
-  public static final Scale scale = new Scale();
   private static int pendingLevels = 0;
   private static double vTotalXP = totalXP;
   private static double vNextLevelXP = nextLevelXP;
@@ -33,17 +32,20 @@ public class LevelManager {
       level++;
     }
   }
+  private static void setBarFill() {
+    Noise[] noiseArr = new Noise[] {new Noise(2, 0.25), new Noise(50, 25, 0.25)};
+    bar.setFill(NoisePattern.create(barLength, barHeight, null, noiseArr, noiseArr, 0, 1, 1));
+  }
   public static void tick() {
     if (Game.frame == 0) {
       bar.setTranslateX(-barLength/2);
-      bar.getTransforms().setAll(scale);
       barGroup.getChildren().addAll(barContainer, bar);
       barContainer.setFill(Color.BLACK);
-      bar.setFill(Color.color(0, 1, 1));
+      setBarFill();
       barGroup.setTranslateY(Game.height * 0.6);
       barGroup.setTranslateX(Game.guiWidth * 0.5);
     }
-    double vXPChange = Math.min((totalXP - vTotalXP) * 0.1, vNextLevelXP * 0.5);
+    double vXPChange = Math.min((totalXP - vTotalXP) * 0.1, vNextLevelXP * 0.2);
     vXP += vXPChange;
     vTotalXP += vXPChange;
     while (vXP >= vNextLevelXP) {
@@ -51,8 +53,9 @@ public class LevelManager {
       vNextLevelXP += 1 + vNextLevelXP * 0.05;
       vLevel++;
       pendingLevels++;
+      setBarFill();
     }
-    scale.setX(vXP/vNextLevelXP);
+    bar.setWidth(barLength * vXP/vNextLevelXP);
     if (pendingLevels > 0 && !ComponentSelect.isActive()) {
       ComponentSelect.activate();
       pendingLevels--;
