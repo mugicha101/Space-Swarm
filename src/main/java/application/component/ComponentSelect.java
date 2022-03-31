@@ -1,9 +1,6 @@
 package application.component;
 
-import application.Game;
-import application.Noise;
-import application.NoisePattern;
-import application.Player;
+import application.*;
 import application.movement.Position;
 import application.sprite.Sprite;
 import application.sprite.StaticSprite;
@@ -149,6 +146,7 @@ public class ComponentSelect {
     }
 
     private void click(MouseEvent mouseEvent) {
+        Sound.play("option_select.mp3", 1, 1, 0, null);
         clickAction.run();
         clear();
     }
