@@ -81,15 +81,13 @@ public class ComponentSelect {
     }
     private static void create(Type type, Position pos) {
         switch(type) {
-            case TURRET -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/turret.png", new double[] {0, 0}, 0.1), "Turret", "Health: 100\nFirerate: 2\nDamage: 20\nSpread: 15\nShotspeed: 15\nRange: 1200", () -> new Turret(Player.core), weaponColor);
-            case SNIPER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/sniper.png", new double[] {0, 0}, 0.1), "Sniper", "Health: 80\nFirerate: 0.25\nDamage: 50\nSpread: 1\nShotspeed: 25\nRange: 1800", () -> new Sniper(Player.core), weaponColor);
-            case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.1), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heals nearby units a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
-            case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.1), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals nearby broken units a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
+            case TURRET -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/turret.png", new double[] {0, 0}, 0.2), "Turret", "Health: 100\nFirerate: 2\nDamage: 20\nSpread: 15\nShotspeed: 15\nRange: 1200", () -> new Turret(Player.core), weaponColor);
+            case SNIPER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/sniper.png", new double[] {0, 0}, 0.2), "Sniper", "Health: 80\nFirerate: 0.25\nDamage: 50\nSpread: 1\nShotspeed: 25\nRange: 1800", () -> new Sniper(Player.core), weaponColor);
+            case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.2), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heals nearby units a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
+            case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals nearby broken units a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
         }
     }
 
-    private final String name;
-    private final String description;
     private final Group group;
     private final Scale scale;
     private final ClickAction clickAction;
@@ -97,8 +95,6 @@ public class ComponentSelect {
     private int time;
     private ComponentSelect(Position pos, SpriteAction spriteAction, String name, String description, ClickAction clickAction, Color color) {
         time = 0;
-        this.name = name;
-        this.description = description;
         this.clickAction = clickAction;
         group = new Group();
         group.setOnMouseClicked(this::click);
@@ -112,7 +108,8 @@ public class ComponentSelect {
         scale = new Scale();
         scale.setY(0);
         box.getTransforms().setAll(scale);
-        bg.setFill(NoisePattern.create(bg.getWidth(), bg.getHeight(), new Noise[] {new Noise(2, 0.1), new Noise(10, 10, 0.1)}, new Noise[] {new Noise(2, 0.1), new Noise(10, 10, 0.1)}, new Noise[] {new Noise(2, 0.1), new Noise(10, 10, 0.1)}, color.getRed(), color.getGreen(), color.getBlue(), new Position(bg.getX(), bg.getY())));
+        Noise[] noiseArr = new Noise[] {new Noise(2, 0.2), new Noise(10, 10, 0.2)};
+        bg.setFill(NoisePattern.create(bg.getWidth(), bg.getHeight(), noiseArr, noiseArr, noiseArr, color.getRed(), color.getGreen(), color.getBlue(), new Position(bg.getX(), bg.getY())));
 
         Label nameLabel = new Label(name);
         nameLabel.setFont(Font.font("AgencyFB", FontWeight.BLACK, 15));
@@ -132,6 +129,10 @@ public class ComponentSelect {
         descLabel.setMaxWidth(box.getWidth());
         descLabel.setWrapText(true);
 
+        Color textColor = Color.color(color.getRed() * 0.1 + 0.9, color.getGreen() * 0.1 + 0.9, color.getBlue() * 0.1 + 0.9);
+        nameLabel.setTextFill(textColor);
+        descLabel.setTextFill(textColor);
+
         group.getChildren().addAll(bg, nameLabel, descLabel);
         group.setClip(box);
 
@@ -143,7 +144,7 @@ public class ComponentSelect {
 
     private void tick() {
         time++;
-        scale.setY(1 - 1.0/(time * 0.25 + 0.75));
+        scale.setY(scale.getY() + (1 - scale.getY()) * 0.1);
         sprite.drawUpdate();
     }
 

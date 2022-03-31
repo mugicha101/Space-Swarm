@@ -9,7 +9,7 @@ import javafx.scene.transform.Scale;
 public class LevelManager {
   public static double totalXP = 0;
   public static double nextLevelXP = 0;
-  public static double xp = 10;
+  public static double xp = 0;
   public static double level = 0;
   public static final double barLength = Game.guiWidth * 0.8;
   public static final double barHeight = 10;
@@ -59,6 +59,7 @@ public class LevelManager {
     if (pendingLevels > 0 && !ComponentSelect.isActive()) {
       ComponentSelect.activate();
       pendingLevels--;
+      Sound.play("effect.mp3", 1, 1, 0.5, null);
     }
   }
 }
