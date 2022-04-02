@@ -142,12 +142,15 @@ public class Game extends Application {
         mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
         // setup player
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             new Turret(Player.core);
             new Sniper(Player.core);
+            new Cannon(Player.core);
         }
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) {
             new Healer(Player.core);
+            new Patcher(Player.core);
+        }
 
         // setup background
         Star.init();

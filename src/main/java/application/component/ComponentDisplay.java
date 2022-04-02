@@ -25,6 +25,8 @@ public class ComponentDisplay {
         return 201;
       else if (o instanceof Reviver)
         return 202;
+      else if (o instanceof Patcher)
+        return 203;
       else {
         if (o instanceof Weapon)
           return 0;

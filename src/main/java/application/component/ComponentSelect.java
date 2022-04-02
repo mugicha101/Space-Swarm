@@ -24,6 +24,14 @@ public class ComponentSelect {
         CANNON,
         TURRET,
         SNIPER,
+        SIPHONGUN,
+        LAZER,
+        OVERCLOCKER,
+        SHIELDER,
+        BEACON,
+        TARGETER,
+        RADAR,
+        ENERGIZER,
         HEALER,
         REVIVER,
         PATCHER,
@@ -59,19 +67,20 @@ public class ComponentSelect {
         for (int i = -1; i <= 1; i++) {
             Position pos = new Position(Game.guiWidth * 0.5 + i * Game.guiWidth * 0.32, Game.height * 0.7);
             if (i == -1) { // weapon
-                switch(rand.nextInt(2)) {
+                switch(rand.nextInt(3)) {
                     case 0 -> ComponentSelect.create(Type.TURRET, pos);
                     case 1 -> ComponentSelect.create(Type.SNIPER, pos);
+                    case 2 -> ComponentSelect.create(Type.CANNON, pos);
                 }
             } else if (i == 0) { // support
-                switch(rand.nextInt(2)) {
-                    case 0 -> ComponentSelect.create(Type.TURRET, pos);
-                    case 1 -> ComponentSelect.create(Type.SNIPER, pos);
+                switch(rand.nextInt(1)) {
+
                 }
             } else {
                 switch(rand.nextInt(2)) {
                     case 0 -> ComponentSelect.create(Type.HEALER, pos);
                     case 1 -> ComponentSelect.create(Type.REVIVER, pos);
+                    case 2 -> ComponentSelect.create(Type.PATCHER, pos);
                 }
             }
         }
@@ -80,8 +89,11 @@ public class ComponentSelect {
         switch(type) {
             case TURRET -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/turret.png", new double[] {0, 0}, 0.2), "Turret", "Health: 100\nFirerate: 2\nDamage: 20\nSpread: 15\nShotspeed: 15\nRange: 1200", () -> new Turret(Player.core), weaponColor);
             case SNIPER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/sniper.png", new double[] {0, 0}, 0.2), "Sniper", "Health: 80\nFirerate: 0.25\nDamage: 50\nSpread: 1\nShotspeed: 25\nRange: 1800", () -> new Sniper(Player.core), weaponColor);
-            case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.2), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heals nearby units a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
-            case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals nearby broken units a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
+            case CANNON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/cannon.png", new double[] {0, 0}, 0.2), "Cannon", "Health: 120\nFirerate: 0.5\nDamage: 12\nAOE: scales with damage\nSpread: 5\nShotspeed: 10\nRange: 900", () -> new Sniper(Player.core), weaponColor);
+            case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.2), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heal a unit a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
+            case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals a broken unit a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
+            case PATCHER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 100\nFirerate: 1\nRange: 50\nHeals all units in range a total of 5% every second", () -> new Reviver(Player.core), recoveryColor);
+
         }
     }
 

@@ -20,19 +20,21 @@ public abstract class Effect {
     effects = activeEffects;
   }
 
-  protected final Component affected;
+  private final Component[] affected;
   protected double duration;
   protected final Group group;
-  public Effect(Component affected, double duration) {
+  public Effect(Component[] affected, double duration) {
     this.affected = affected;
     this.duration = duration;
     this.group = new Group();
     effects.add(this);
+    effectGroup.getChildren().add(group);
   }
 
   public final void tick() {
     double tickAmount = Math.min(duration, 1/60.0);
-    action(tickAmount);
+    for (int i = 0; i < affected.length; i++)
+      action(i, affected[i], tickAmount);
     duration -= tickAmount;
   }
 
@@ -40,10 +42,11 @@ public abstract class Effect {
     return duration > 0;
   }
 
-  protected abstract void action(double timeMulti);
+  protected abstract void action(int index, Component component, double timeMulti);
   private void kill() {
     effectGroup.getChildren().remove(group);
-    remove();
+    for (int i = 0; i < affected.length; i++)
+      remove(i, affected[i]);
   }
-  protected abstract void remove(); // remove effect
+  protected abstract void remove(int index, Component component); // remove effect
 }

@@ -2,6 +2,7 @@ package application.chunk;
 
 import application.action.Bullet;
 import application.component.Component;
+import application.movement.Position;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Pair;
 
@@ -45,6 +46,17 @@ public class Chunk {
       for (int y = min.getValue(); y <= max.getValue(); y++)
         chunks.add(getChunk(x, y));
       return chunks;
+  }
+
+  public static HashSet<Component> getComponents(Position pos, double radius) {
+    HashSet<Component> components = new HashSet<>();
+    for (Chunk chunk : Chunk.getChunks(new Rectangle2D(pos.x-radius/2, pos.y-radius/2, radius, radius))) {
+      for (Component c : chunk.components) {
+        if (c.velo.pos.distSqd(pos) < radius * radius)
+          components.add(c);
+      }
+    }
+    return components;
   }
 
   public final HashSet<Bullet> bullets;

@@ -41,8 +41,8 @@ public class Enemy {
               minComponents,
               (int)
                       ((1 - 20.0 / (Player.core.components.size() + 20))
-                              * (0.25 + 1.25 * Math.random())
-                              * (rand.nextDouble() < 0.01 ? 5 : 1)
+                              * (0.25 + 0.75 * Math.random())
+                              * (rand.nextDouble() < 0.01 ? 3 : 1)
                               * Player.core.components.size()));
       new Enemy(c);
       components += c;
