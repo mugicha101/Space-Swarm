@@ -23,7 +23,7 @@ public class Turret extends Weapon {
   @Override
   protected boolean action() {
     double dir = DirCalc.dirTo(velo.pos, parent.aimPos);
-    velo.add((new Position()).moveInDir(dir, -0.5));
+    // velo.add((new Position()).moveInDir(dir, -0.5));
     Sound.play("shot1.mp3", 0.2, 1, 0.25, parent == Player.core? null : velo.pos);
     new TurretBullet(parent, this, velo.pos.clone().moveInDir(dir, 16).moveInDir(dir + 90 * side, 3), dir, velo);
     side = -side;

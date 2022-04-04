@@ -5,7 +5,7 @@ import application.movement.Position;
 import application.movement.Velocity;
 
 public class Player {
-  public static Core core = new Core(new Position());
+  public static Core core = null;
   public static Velocity getVelo() {
     return core.velo;
   }

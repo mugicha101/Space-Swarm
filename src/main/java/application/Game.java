@@ -10,13 +10,18 @@ import application.particle.Particle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -52,6 +57,7 @@ public class Game extends Application {
     public static Rectangle renderArea;
     public static Rectangle sceneBG;
     public static Scale sceneBGScale;
+    public static Label gameOverLabel;
 
     public void start(Stage stage) throws IOException {
         // setup JavaFX
@@ -63,10 +69,11 @@ public class Game extends Application {
         stage.setHeight(height + borderWidth * 2);
         stage.setMinWidth(borderWidth);
         stage.setMinHeight(borderWidth);
+        stage.setFullScreen(true);
         // stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(true);
         stage.show();
-        stage.setTitle("Game");
+        stage.setTitle("Space Swarm");
         Game.stage = stage;
 
         // setup input
@@ -141,19 +148,20 @@ public class Game extends Application {
         mainGroup.setOnMousePressed(e -> mouseDown = true);
         mainGroup.setOnMouseReleased(e -> mouseDown = false);
 
-        // setup player
-        for (int i = 0; i < 3; i++) {
-            new Turret(Player.core);
-            new Sniper(Player.core);
-            new Cannon(Player.core);
-        }
-        for (int i = 0; i < 2; i++) {
-            new Healer(Player.core);
-            new Patcher(Player.core);
-        }
-
         // setup background
         Star.init();
+
+        // gameover label
+        gameOverLabel = new Label("Press R to Restart");
+        gameOverLabel.setFont(Font.font("Impact", FontWeight.BLACK, 50));
+        gameOverLabel.setTextAlignment(TextAlignment.CENTER);
+        gameOverLabel.setAlignment(Pos.CENTER);
+        gameOverLabel.setTranslateX(0);
+        gameOverLabel.setTranslateY(height * 0.5);
+        gameOverLabel.setMinWidth(width);
+        gameOverLabel.setMaxWidth(width);
+        gameOverLabel.setTextFill(Color.WHITE);
+        mainGroup.getChildren().add(gameOverLabel);
 
         // setup music
         Sound.initMusic();
@@ -165,6 +173,30 @@ public class Game extends Application {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
+
+        // first loop
+        reset();
+    }
+
+    public void reset() {
+        ComponentDisplay.displayList.clear();
+        Effect.clear();
+        Attack.clear();
+        Particle.clear();
+
+        Player.core = new Core(new Position());
+        for (Core core : Core.cores) {
+            core.remove(true);
+        }
+        for (int i = 0; i < 5; i++) {
+            new Turret(Player.core);
+        }
+        for (int i = 0; i < 3; i++) {
+            new Healer(Player.core);
+        }
+        for (int i = 0; i < 2; i++) {
+            new Sniper(Player.core);
+        }
     }
 
     private void run() {
@@ -179,23 +211,33 @@ public class Game extends Application {
 
     private void input() {
         toggles();
+        if (!Player.core.isAlive() && Input.getInput("restart").onInitialPress())
+            reset();
+        else if (Player.core.isAlive() && Input.getInput("restart").onInitialPress()) {
+            for (Component component : Player.core.components)
+                component.damage(10000, null);
+        }
     }
 
     private void tick() {
         screenResize();
         updateScroll();
-        Player.tick();
-        Enemy.tickEnemies();
-        Core.tickCores();
-        Attack.tickAttacks();
-        Effect.tickEffects();
-        Particle.tickParticles();
-        Chunk.tick();
-        Star.tickStars();
+
+        if (frame % 5 == 0 || !Input.getInput("slow").isPressed()) {
+            Player.tick();
+            Enemy.tickEnemies();
+            Core.tickCores();
+            Attack.tickAttacks();
+            Effect.tickEffects();
+            Particle.tickParticles();
+            Chunk.tick();
+            Star.tickStars();
+        }
 
         ComponentDisplay.tickDisplays();
         LevelManager.tick();
         ComponentSelect.tickOptions();
+        gameOverTick();
     }
 
     private void toggles() {
@@ -206,7 +248,7 @@ public class Game extends Application {
             stage.setFullScreen(!stage.isFullScreen());
         }
         if (Input.getInput("pause").onInitialPress()) {
-            paused = !paused;
+            // paused = !paused;
         }
     }
 
@@ -248,7 +290,7 @@ public class Game extends Application {
         renderArea.setX(-scaledWidth/2+camPos.x);
         renderArea.setY(-scaledHeight/2+camPos.y);
         cursor.setStroke(mouseDown? Color.RED : Color.WHITE);
-        zoomLevel = 5/(5 + Math.sqrt(Player.core.components.size()));
+        zoomLevel = 4/(4 + Math.sqrt(Player.core.components.size()));
         zoom = zoomMulti * zoomLevel;
     }
 
@@ -262,6 +304,13 @@ public class Game extends Application {
             if (zoomMulti < 1)
                 zoomMulti = 1;
         }
+    }
+
+    private static void gameOverTick() {
+        gameOverLabel.setVisible(!Player.core.isAlive());
+        if (Player.core.isAlive())
+            return;
+        gameOverLabel.setOpacity(0.75 + Math.sin(frame / Math.PI / 30));
     }
 
     private static void moveCursor(MouseEvent e) {

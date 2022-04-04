@@ -19,7 +19,7 @@ public class Cannon extends Weapon {
   @Override
   protected boolean action() {
     double dir = DirCalc.dirTo(velo.pos, parent.aimPos);
-    velo.add((new Position()).moveInDir(dir, -3));
+    velo.add((new Position()).moveInDir(dir, -3/(firerate*2)));
     Sound.play("shot1.mp3", 1, 0.5, 0.25, parent == Player.core? null : velo.pos);
     new CannonBullet(parent, this, velo.pos.clone().moveInDir(dir, 14), dir, velo);
     return true;

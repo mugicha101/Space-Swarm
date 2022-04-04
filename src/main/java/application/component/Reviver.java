@@ -17,7 +17,7 @@ public class Reviver extends Support {
       if (!component.incapacitated || component == this)
         continue;
       double distSqd = velo.pos.distSqd(component.velo.pos);
-      if (distSqd < range * range && (target == null || component.getHealthProportion() > target.getHealthProportion())) {
+      if ((component instanceof Siphongun || distSqd < range * range) && (target == null || component.getHealthProportion() > target.getHealthProportion())) {
         target = component;
       }
     }

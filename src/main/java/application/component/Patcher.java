@@ -13,7 +13,7 @@ public class Patcher extends Support {
 
     @Override
     protected boolean action() {
-        new PatchEffect(this, 50, duration, Color.color(1, 0, 1), 0.1 * potency, false);
+        new PatchEffect(this, range, duration, Color.color(1, 0, 1), 0.1 * potency, false);
         return true;
     }
 }

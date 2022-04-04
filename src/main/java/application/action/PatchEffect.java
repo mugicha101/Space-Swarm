@@ -16,4 +16,7 @@ public class PatchEffect extends RangeEffect {
     protected void effectTick(int index, Component component, double timeMulti) {
         if (component.isIncapacitated() || !onlyIncapacitated) component.healProportion(healthPerSecond * timeMulti);
     }
+
+    @Override
+    public void apply(Component component) {}
 }

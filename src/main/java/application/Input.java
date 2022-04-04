@@ -18,13 +18,11 @@ public class Input {
     inputMap.put("right", new Input(KeyCode.D, KeyCode.RIGHT));
     inputMap.put("up", new Input(KeyCode.W, KeyCode.UP));
     inputMap.put("down", new Input(KeyCode.S, KeyCode.DOWN));
-    inputMap.put("shoot", new Input(KeyCode.SPACE));
-    inputMap.put("focus", new Input(KeyCode.SHIFT));
+    inputMap.put("slow", new Input(KeyCode.PLUS));
     inputMap.put("debug", new Input(KeyCode.F5));
     inputMap.put("fullscreen", new Input(KeyCode.F));
     inputMap.put("pause", new Input(KeyCode.ESCAPE));
-    inputMap.put("zoomIn", new Input(KeyCode.I));
-    inputMap.put("zoomOut", new Input(KeyCode.O));
+    inputMap.put("restart", new Input(KeyCode.R));
   }
 
   public static Input getInput(String name) {

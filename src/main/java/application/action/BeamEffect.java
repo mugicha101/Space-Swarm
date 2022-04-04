@@ -40,7 +40,4 @@ public abstract class BeamEffect extends Effect {
     }
 
     protected abstract void effectTick(int index, Component component, double timeMulti);
-
-    @Override
-    protected void remove(int index, Component component) {}
 }

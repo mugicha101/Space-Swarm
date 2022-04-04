@@ -51,8 +51,11 @@ public class ComponentSelect {
     public static final Group selectGroup = new Group();
     private static final ArrayList<ComponentSelect> activeList = new ArrayList<>();
     public static void tickOptions() {
-        for (ComponentSelect cs : activeList)
-            cs.tick();
+        if (Player.core.isAlive())
+            for (ComponentSelect cs : activeList)
+                cs.tick();
+        else
+            clear();
     }
     private static void clear() {
         for (ComponentSelect cs : activeList)
@@ -73,11 +76,16 @@ public class ComponentSelect {
                     case 2 -> ComponentSelect.create(Type.CANNON, pos);
                 }
             } else if (i == 0) { // support
-                switch(rand.nextInt(1)) {
-
+                switch(rand.nextInt(6)) {
+                    case 0 -> ComponentSelect.create(Type.OVERCLOCKER, pos);
+                    case 1 -> ComponentSelect.create(Type.SHIELDER, pos);
+                    case 2 -> ComponentSelect.create(Type.BEACON, pos);
+                    case 3 -> ComponentSelect.create(Type.TARGETER, pos);
+                    case 4 -> ComponentSelect.create(Type.RADAR, pos);
+                    case 5 -> ComponentSelect.create(Type.ENERGIZER, pos);
                 }
             } else {
-                switch(rand.nextInt(2)) {
+                switch(rand.nextInt(3)) {
                     case 0 -> ComponentSelect.create(Type.HEALER, pos);
                     case 1 -> ComponentSelect.create(Type.REVIVER, pos);
                     case 2 -> ComponentSelect.create(Type.PATCHER, pos);
@@ -90,10 +98,17 @@ public class ComponentSelect {
             case TURRET -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/turret.png", new double[] {0, 0}, 0.2), "Turret", "Health: 100\nFirerate: 2\nDamage: 20\nSpread: 15\nShotspeed: 15\nRange: 1200", () -> new Turret(Player.core), weaponColor);
             case SNIPER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/sniper.png", new double[] {0, 0}, 0.2), "Sniper", "Health: 80\nFirerate: 0.25\nDamage: 50\nSpread: 1\nShotspeed: 25\nRange: 1800", () -> new Sniper(Player.core), weaponColor);
             case CANNON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/cannon.png", new double[] {0, 0}, 0.2), "Cannon", "Health: 120\nFirerate: 0.5\nDamage: 12\nAOE: scales with damage\nSpread: 5\nShotspeed: 10\nRange: 900", () -> new Sniper(Player.core), weaponColor);
+            case SIPHONGUN -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/siphongun.png", new double[] {0, 0}, 0.2), "Siphongun", "Health: 90\nFirerate: 0.75\nDamage: 20\nSpread: 15\nShotspeed: 8\nRange: 1000\nCan be buffed by any support unit", () -> new Siphongun(Player.core), weaponColor);
+            case LAZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/lazer.png", new double[] {0, 0}, 0.2), "Lazer", "Health: 70\nFirerate: 0.2\nDamage: 50\nshoots a lazer\nSpread: 0\nShotspeed: NA\nRange: 900\nwidth scales with shotspeed", () -> new Lazer(Player.core), weaponColor);
+            case OVERCLOCKER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/overclocker.png", new double[] {0, 0}, 0.2), "Overclocker", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the firerate of all units in range by 15%\nCannot affect other overclockers", () -> new Overclocker(Player.core), supportColor);
+            case SHIELDER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/shielder.png", new double[] {0, 0}, 0.2), "Shielder", "Health: 200\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the armor of all units in range by 15%", () -> new Shielder(Player.core), supportColor);
+            case BEACON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/beacon.png", new double[] {0, 0}, 0.2), "Beacon", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the damage/potency of all units in range by 15%\nCannot affect other beacons", () -> new Beacon(Player.core), supportColor);
+            case TARGETER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/targeter.png", new double[] {0, 0}, 0.2), "Targeter", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the shotspeed and accuracy of all weapons in range by 15%", () -> new Targeter(Player.core), supportColor);
+            case RADAR -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/radar.png", new double[] {0, 0}, 0.2), "Radar", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the range of all units in range by 15%", () -> new Radar(Player.core), supportColor);
+            case ENERGIZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/energizer.png", new double[] {0, 0}, 0.2), "Energizer", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the duration for all support/recovery units in range by 15%\nCannot affect other energizers", () -> new Overclocker(Player.core), supportColor);
             case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.2), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heal a unit a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
             case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals a broken unit a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
             case PATCHER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 100\nFirerate: 1\nRange: 50\nHeals all units in range a total of 5% every second", () -> new Reviver(Player.core), recoveryColor);
-
         }
     }
 
@@ -112,8 +127,8 @@ public class ComponentSelect {
         selectGroup.getChildren().add(group);
         activeList.add(this);
 
-        Rectangle bg = new Rectangle(-60, 0, 120, 200);
-        Rectangle box = new Rectangle(-60, 0, 120, 200);
+        Rectangle bg = new Rectangle(-60, 0, 120, 240);
+        Rectangle box = new Rectangle(-60, 0, 120, 240);
         scale = new Scale();
         scale.setY(0);
         box.getTransforms().setAll(scale);

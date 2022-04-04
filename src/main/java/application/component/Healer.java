@@ -17,7 +17,7 @@ public class Healer extends Support {
       if (component == this)
         continue;
       double distSqd = velo.pos.distSqd(component.velo.pos);
-      if (distSqd < range*range) {
+      if (component instanceof Siphongun || distSqd < range*range) {
         if (target == null)
           target = component;
         else if (!target.incapacitated && !component.incapacitated) {

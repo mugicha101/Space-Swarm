@@ -1,5 +1,6 @@
 package application.particle;
 
+import application.action.Effect;
 import application.movement.Position;
 import javafx.scene.Group;
 
@@ -31,6 +32,11 @@ public abstract class Particle {
         p.delete();
     }
     particles = aliveParticles;
+  }
+  public static void clear() {
+    for (Particle particle : particles)
+      particle.delete();
+    particles.clear();
   }
 
 

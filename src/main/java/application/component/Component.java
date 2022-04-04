@@ -3,6 +3,7 @@ package application.component;
 import application.Core;
 import application.Player;
 import application.Sound;
+import application.action.Effect;
 import application.chunk.Chunk;
 import application.chunk.Chunkable;
 import application.movement.DirCalc;
@@ -14,6 +15,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public abstract class Component extends Chunkable {
@@ -25,6 +27,8 @@ public abstract class Component extends Chunkable {
   private double radius;
   private double health;
   private final double maxHealth;
+  private final double initFirerate;
+  private final double initRange;
   public double armor;
   public double firerate;
   public double range;
@@ -34,6 +38,9 @@ public abstract class Component extends Chunkable {
   private Double delay;
   protected Core parent;
   private final boolean passive;
+  private boolean deleted;
+  private boolean statUpdateNeeded;
+  private HashSet<Effect> effects;
 
   public Component(
       Core parent,
@@ -49,9 +56,6 @@ public abstract class Component extends Chunkable {
     this.radius = radius;
     this.health = health;
     maxHealth = health;
-    armor = 1;
-    this.firerate = firerate;
-    this.range = range;
     incapacitated = false;
     velo = new Velocity(parent.velo.pos.clone(), 0.01);
     targetPos = velo.pos.clone();
@@ -63,6 +67,40 @@ public abstract class Component extends Chunkable {
     this.sprite.enable();
     if (parent == Player.core)
       new ComponentDisplay(this);
+    deleted = false;
+    statUpdateNeeded = false;
+    effects = new HashSet<>();
+
+    initFirerate = firerate;
+    initRange = range;
+    armor = 1;
+    this.firerate = initFirerate;
+    this.range = initRange;
+  }
+
+  public void addEffect(Effect effect) {
+    if (effects.add(effect))
+      statUpdateNeeded = true;
+  }
+
+  public void removeEffect(Effect effect) {
+    if (effects.remove(effect))
+      statUpdateNeeded = true;
+  }
+
+  protected void updateStats() {
+    // reset to base values
+    armor = 1;
+    firerate = initFirerate;
+    range = initRange;
+
+    // apply effects
+    for (Effect effect : effects)
+      effect.apply(this);
+  }
+
+  public boolean isDeleted() {
+    return deleted;
   }
 
   public boolean isIncapacitated() {
@@ -81,6 +119,10 @@ public abstract class Component extends Chunkable {
     return parent == core;
   }
 
+  public Core getParent() {
+    return parent;
+  }
+
   public void setParent(Core core) { // note: does not remove from previous parent (must do manuallY)
     parent = core;
     core.components.add(this);
@@ -89,6 +131,7 @@ public abstract class Component extends Chunkable {
   }
 
   public void damage(double amount, Core source) {
+    amount /= armor;
     double oldHealth = health;
     health -= amount;
     if (health <= 0) {
@@ -123,6 +166,10 @@ public abstract class Component extends Chunkable {
   }
 
   public void tick() {
+    // update stats
+    if (statUpdateNeeded)
+      updateStats();
+
     // swarm movement
     Position accel = new Position();
     double maxDistSqd = parent.components.size() * 100 + 60 * 60;
@@ -147,7 +194,7 @@ public abstract class Component extends Chunkable {
       delay = null;
     } else {
       if (delay == null && (parent.attacking || passive)) {
-        delay = rand.nextDouble() * 60.0 / firerate;
+        delay = rand.nextDouble() * (60.0 / firerate);
       } else if (delay != null) delay--;
       while (delay != null && delay <= 0) {
         if (parent.attacking || passive) {
@@ -176,6 +223,7 @@ public abstract class Component extends Chunkable {
     componentGroup.getChildren().remove(group);
     removeFromChunks();
     sprite.disable();
+    deleted = true;
   }
 
   @Override

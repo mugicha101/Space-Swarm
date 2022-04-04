@@ -23,6 +23,11 @@ public abstract class Attack extends Chunkable {
     }
     attacks = activeAttacks;
   }
+  public static void clear() {
+    for (Attack attack : attacks)
+      attack.kill();
+    attacks.clear();
+  }
 
   protected final Group group;
   protected Core parent;
