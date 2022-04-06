@@ -12,9 +12,13 @@ import javafx.util.Duration;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Sound {
-    private static final String basePath = "src/main/resources/sounds/";
+    private enum Type {
+        MUSIC, AUDIOCLIP
+    }
+    private static final String basePath = "sounds/";
     private static final double minVolume = 0.01; // min volume of a sound
     private static final double sfxVolume = 1;
     private static final double musicVolume = 1;
@@ -25,7 +29,7 @@ public class Sound {
         if (volume > 1) volume = 1;
         volume *= sfxVolume;
         if (!audioMap.containsKey(path)) {
-            audioMap.put(path, new AudioClip(Paths.get(basePath + path).toUri().toString()));
+            audioMap.put(path, new AudioClip(Objects.requireNonNull(Game.class.getResource(basePath + path)).toExternalForm()));
         }
         AudioClip audio = audioMap.get(path);
         double balance = pos == null? 0 : (Player.getPos().clone().moveInDir(DirCalc.dirTo(pos), 1).x);
@@ -35,7 +39,7 @@ public class Sound {
     }
 
     public static void initMusic() {
-        Media music = new Media(new File(basePath + "music/space-swarm.mp3").toURI().toString());
+        Media music = new Media(Objects.requireNonNull(Game.class.getResource(basePath + "music/space-swarm.mp3")).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(music);
         mediaPlayer.setVolume(musicVolume);
         mediaPlayer.setCycleCount(-1);

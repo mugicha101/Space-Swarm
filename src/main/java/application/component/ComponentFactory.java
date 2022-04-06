@@ -8,13 +8,13 @@ public class ComponentFactory {
   private static final Random rand = new Random();
   public static void create(Core core) {
     double r = Math.random();
-    if (r < 0.4) {
+    if (r < 0.5) {
       switch (rand.nextInt(4)) {
         case 0 -> new Turret(core);
         case 1 -> new Sniper(core);
         case 2 -> new Cannon(core);
       }
-    } else if (r < 0.5){
+    } else if (r < 0.6){
       switch (rand.nextInt(2)) {
         case 0 -> new Lazer(core);
         case 1 -> new Siphongun(core);

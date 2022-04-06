@@ -39,6 +39,8 @@ public class LazerAttack extends Attack {
         this.dir = dir;
         this.color = color;
         width = parentWeapon.shotspeed * widthMulti;
+        if (width > 200)
+            width = 200;
         range = parentWeapon.range * rangeMulti;
         damage = parentWeapon.damage * damageMulti;
         driftX = sourceVelo.x;

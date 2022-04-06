@@ -23,6 +23,18 @@ public class LevelManager {
   private static double vXP = xp;
   private static double vLevel = level;
 
+  public static void reset() {
+    totalXP = 0;
+    nextLevelXP = 5;
+    xp = 0;
+    level = 0;
+    pendingLevels = 0;
+    vTotalXP = totalXP;
+    vNextLevelXP = nextLevelXP;
+    vXP = xp;
+    vLevel = level;
+  }
+
   public static void addXP(double amount) {
     xp += amount;
     totalXP += amount;

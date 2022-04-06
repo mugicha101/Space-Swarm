@@ -87,7 +87,8 @@ public class Core {
     coreGroup.getChildren().remove(group);
     for (Component component : components)
      component.remove();
-    LevelManager.addXP(components.size() * playerDamage / (playerDamage + otherDamage));
+    if (playerDamage + otherDamage > 0)
+      LevelManager.addXP(components.size() * playerDamage / (playerDamage + otherDamage));
     if (this != Player.core) components.clear();
   }
   public void remove() {

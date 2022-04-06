@@ -24,11 +24,11 @@ public abstract class Component extends Chunkable {
 
   protected final Group group;
   protected final Sprite sprite;
-  private double radius;
+  private final double radius;
   private double health;
-  private final double maxHealth;
-  private final double initFirerate;
-  private final double initRange;
+  public final double maxHealth;
+  public final double initFirerate;
+  public final double initRange;
   public double armor;
   public double firerate;
   public double range;
@@ -40,7 +40,7 @@ public abstract class Component extends Chunkable {
   private final boolean passive;
   private boolean deleted;
   private boolean statUpdateNeeded;
-  private HashSet<Effect> effects;
+  private final HashSet<Effect> effects;
 
   public Component(
       Core parent,
@@ -97,6 +97,15 @@ public abstract class Component extends Chunkable {
     // apply effects
     for (Effect effect : effects)
       effect.apply(this);
+    if (this instanceof Siphongun) {
+      for (Effect effect : effects)
+        effect.apply(this);
+    }
+
+    if (firerate > initFirerate * 10)
+      firerate = initFirerate * 10;
+    if (range > initRange * 10)
+      range = initRange * 10;
   }
 
   public boolean isDeleted() {

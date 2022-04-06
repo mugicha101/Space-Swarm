@@ -21,6 +21,6 @@ public class RadarEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        component.range *= rangeMulti;
+        component.range += component.initRange * rangeMulti;
     }
 }

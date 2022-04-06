@@ -15,6 +15,6 @@ public class ArmorEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        component.armor *= armorMulti;
+        component.armor += armorMulti;
     }
 }

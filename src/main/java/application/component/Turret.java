@@ -5,7 +5,6 @@ import application.Player;
 import application.Sound;
 import application.action.TurretBullet;
 import application.movement.DirCalc;
-import application.movement.Position;
 import application.sprite.*;
 
 public class Turret extends Weapon {

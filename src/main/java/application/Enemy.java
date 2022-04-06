@@ -37,12 +37,13 @@ public class Enemy {
 
     // spawn
     while (components < maxComponents && enemies.size() < maxEnemies) {
+      double scaleMulti = ((1 - 20.0 / (Player.core.components.size() + 20)));
       int c = Math.max(
               minComponents,
               (int)
-                      ((1 - 20.0 / (Player.core.components.size() + 20))
-                              * (0.25 + 1 * Math.random())
-                              * (rand.nextDouble() < 0.01 ? 3 : 1)
+                      (scaleMulti
+                              * (0.25 + 1.25 * Math.random())
+                              * (rand.nextDouble() < 0.03 ? 2 : 1)
                               * Player.core.components.size()));
       new Enemy(c);
       components += c;

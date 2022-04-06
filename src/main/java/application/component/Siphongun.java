@@ -4,11 +4,8 @@ import application.Core;
 import application.Player;
 import application.Sound;
 import application.action.SiphonBullet;
-import application.action.TurretBullet;
 import application.movement.DirCalc;
 import application.sprite.StaticSprite;
-
-import java.util.HashSet;
 
 public class Siphongun extends Weapon {
     public Siphongun(Core parent) {

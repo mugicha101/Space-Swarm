@@ -22,8 +22,9 @@ public class DurationEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        if (component instanceof Support support) {
-            support.duration *= durationMulti;
+        if (component instanceof Support) {
+            Support support = (Support)component;
+            support.duration += support.initDuration * durationMulti;
         }
     }
 }

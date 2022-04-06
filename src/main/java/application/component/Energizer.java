@@ -2,8 +2,6 @@ package application.component;
 
 import application.Core;
 import application.action.DurationEffect;
-import application.action.OverclockEffect;
-import application.action.PatchEffect;
 import application.sprite.StaticSprite;
 import javafx.scene.paint.Color;
 
@@ -14,7 +12,7 @@ public class Energizer extends Support {
 
     @Override
     protected boolean action() {
-        new DurationEffect(this, range, duration, Color.color(1, 1, 0), 1.15 * potency);
+        new DurationEffect(this, range, duration, Color.color(1, 1, 0), 0.15 * potency);
         return true;
     }
 }

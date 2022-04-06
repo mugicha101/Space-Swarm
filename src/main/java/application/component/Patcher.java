@@ -1,7 +1,6 @@
 package application.component;
 
 import application.Core;
-import application.action.HealEffect;
 import application.action.PatchEffect;
 import application.sprite.StaticSprite;
 import javafx.scene.paint.Color;

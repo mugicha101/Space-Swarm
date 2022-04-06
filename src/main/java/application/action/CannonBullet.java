@@ -22,9 +22,11 @@ import java.util.HashSet;
 public class CannonBullet extends Bullet {
     public CannonBullet(Core parentCore, Weapon parentWeapon, Position pos, double dir, Velocity sourceVelo) {
         super(parentCore, parentWeapon, pos, 15, dir, sourceVelo, 1, 1, 1, 1);
-        Circle bullet = new Circle(0, 0, radius);
-        bullet.setFill(new RadialGradient(0, 0, 0, 0, radius, false, CycleMethod.NO_CYCLE, new Stop(0.5, Color.WHITE), new Stop(0.8, Color.color(0.5, 0, 1))));
-        group.getChildren().add(bullet);
+        Circle outer = new Circle(0, 0, radius);
+        Circle inner = new Circle(0, 0, 0.5 * radius);
+        outer.setFill(Color.color(0.5, 0, 1));
+        inner.setFill(Color.WHITE);
+        group.getChildren().addAll(outer, inner);
     }
 
     @Override

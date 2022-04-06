@@ -25,9 +25,10 @@ public class TargetEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        if (component instanceof Weapon weapon) {
+        if (component instanceof Weapon) {
+            Weapon weapon = (Weapon)component;
             weapon.spread *= spreadMulti;
-            weapon.shotspeed *= shotspeedMulti;
+            weapon.shotspeed += weapon.initShotspeed * shotspeedMulti;
         }
     }
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Star {
     private static final int regionSize = 2000;
-    private static final double starDensity = 3;
+    private static final double starDensity = 2;
     public static final Group starGroup = new Group();
     private static final ArrayList<Star> stars = new ArrayList<>();
     public static void tickStars() {

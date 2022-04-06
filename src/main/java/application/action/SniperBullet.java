@@ -15,10 +15,13 @@ import javafx.scene.shape.Circle;
 public class SniperBullet extends Bullet {
   public SniperBullet(Core parentCore, Weapon parentWeapon, Position pos, double dir, Velocity sourceVelo) {
     super(parentCore, parentWeapon, pos, 15, dir, sourceVelo, 1, 1, 1, 1);
-    Circle bullet = new Circle(0, 0, radius*1.5);
-    bullet.setFill(new RadialGradient(0, 0, 0, 0, radius*1.5, false, CycleMethod.NO_CYCLE, new Stop(0.5, Color.WHITE), new Stop(0.8, Color.color(0, 0.65, 0.8))));
-    bullet.setScaleY(0.25);
-    group.getChildren().add(bullet);
+    Circle outer = new Circle(0, 0, 1.5 * radius);
+    Circle inner = new Circle(0, 0, 1 * radius);
+    outer.setFill(Color.color(0, 0.65, 0.8));
+    inner.setFill(Color.WHITE);
+    outer.setScaleY(0.25);
+    inner.setScaleY(0.25);
+    group.getChildren().addAll(outer, inner);
   }
 
   protected void hit(Component hitComponent) {

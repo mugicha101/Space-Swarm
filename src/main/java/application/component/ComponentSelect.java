@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -70,10 +69,12 @@ public class ComponentSelect {
         for (int i = -1; i <= 1; i++) {
             Position pos = new Position(Game.guiWidth * 0.5 + i * Game.guiWidth * 0.32, Game.height * 0.7);
             if (i == -1) { // weapon
-                switch(rand.nextInt(3)) {
+                switch(rand.nextInt(5)) {
                     case 0 -> ComponentSelect.create(Type.TURRET, pos);
                     case 1 -> ComponentSelect.create(Type.SNIPER, pos);
                     case 2 -> ComponentSelect.create(Type.CANNON, pos);
+                    case 3 -> ComponentSelect.create(Type.SIPHONGUN, pos);
+                    case 4 -> ComponentSelect.create(Type.LAZER, pos);
                 }
             } else if (i == 0) { // support
                 switch(rand.nextInt(6)) {
@@ -97,9 +98,9 @@ public class ComponentSelect {
         switch(type) {
             case TURRET -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/turret.png", new double[] {0, 0}, 0.2), "Turret", "Health: 100\nFirerate: 2\nDamage: 20\nSpread: 15\nShotspeed: 15\nRange: 1200", () -> new Turret(Player.core), weaponColor);
             case SNIPER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/sniper.png", new double[] {0, 0}, 0.2), "Sniper", "Health: 80\nFirerate: 0.25\nDamage: 50\nSpread: 1\nShotspeed: 25\nRange: 1800", () -> new Sniper(Player.core), weaponColor);
-            case CANNON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/cannon.png", new double[] {0, 0}, 0.2), "Cannon", "Health: 120\nFirerate: 0.5\nDamage: 12\nAOE: scales with damage\nSpread: 5\nShotspeed: 10\nRange: 900", () -> new Sniper(Player.core), weaponColor);
-            case SIPHONGUN -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/siphongun.png", new double[] {0, 0}, 0.2), "Siphongun", "Health: 90\nFirerate: 0.75\nDamage: 20\nSpread: 15\nShotspeed: 8\nRange: 1000\nCan be buffed by any support unit", () -> new Siphongun(Player.core), weaponColor);
-            case LAZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/lazer.png", new double[] {0, 0}, 0.2), "Lazer", "Health: 70\nFirerate: 0.2\nDamage: 50\nshoots a lazer\nSpread: 0\nShotspeed: NA\nRange: 900\nwidth scales with shotspeed", () -> new Lazer(Player.core), weaponColor);
+            case CANNON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/cannon.png", new double[] {0, 0}, 0.2), "Cannon", "Health: 120\nFirerate: 0.5\nDamage: 12\nAOE: scales with damage\nSpread: 5\nShotspeed: 10\nRange: 900", () -> new Cannon(Player.core), weaponColor);
+            case SIPHONGUN -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/siphongun.png", new double[] {0, 0}, 0.2), "Siphongun", "Health: 90\nFirerate: 0.75\nDamage: 20\nSpread: 15\nShotspeed: 8\nRange: 1000\nCan be buffed by any support unit\nSupport buffs are are doubled", () -> new Siphongun(Player.core), weaponColor);
+            case LAZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/lazer.png", new double[] {0, 0}, 0.2), "Lazer", "Health: 70\nFirerate: 0.2\nDamage: 50\nshoots a lazer\nSpread: 0\nLaser Width: 20\nRange: 900\nwidth scales with shotspeed", () -> new Lazer(Player.core), weaponColor);
             case OVERCLOCKER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/overclocker.png", new double[] {0, 0}, 0.2), "Overclocker", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the firerate of all units in range by 15%\nCannot affect other overclockers", () -> new Overclocker(Player.core), supportColor);
             case SHIELDER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/shielder.png", new double[] {0, 0}, 0.2), "Shielder", "Health: 200\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the armor of all units in range by 15%", () -> new Shielder(Player.core), supportColor);
             case BEACON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/beacon.png", new double[] {0, 0}, 0.2), "Beacon", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the damage/potency of all units in range by 15%\nCannot affect other beacons", () -> new Beacon(Player.core), supportColor);
@@ -108,7 +109,7 @@ public class ComponentSelect {
             case ENERGIZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/energizer.png", new double[] {0, 0}, 0.2), "Energizer", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the duration for all support/recovery units in range by 15%\nCannot affect other energizers", () -> new Overclocker(Player.core), supportColor);
             case HEALER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/healer.png", new double[] {0, 0}, 0.2), "Healer", "Health: 100\nFirerate: 5\nRange: 50\n Heal a unit a total of 4% every second\nPrioritizes broken units", () -> new Healer(Player.core), recoveryColor);
             case REVIVER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 120\nFirerate: 1\nRange: 75\nHeals a broken unit a total of 12.5% every second", () -> new Reviver(Player.core), recoveryColor);
-            case PATCHER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/reviver.png", new double[] {0, 0}, 0.2), "Reviver", "Health: 100\nFirerate: 1\nRange: 50\nHeals all units in range a total of 5% every second", () -> new Reviver(Player.core), recoveryColor);
+            case PATCHER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/patcher.png", new double[] {0, 0}, 0.2), "Patcher", "Health: 100\nFirerate: 1\nRange: 50\nHeals all units in range a total of 5% every second", () -> new Reviver(Player.core), recoveryColor);
         }
     }
 

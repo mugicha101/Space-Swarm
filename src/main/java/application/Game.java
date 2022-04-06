@@ -15,6 +15,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class Game extends Application {
@@ -161,6 +164,7 @@ public class Game extends Application {
         gameOverLabel.setMinWidth(width);
         gameOverLabel.setMaxWidth(width);
         gameOverLabel.setTextFill(Color.WHITE);
+        gameOverLabel.setVisible(false);
         mainGroup.getChildren().add(gameOverLabel);
 
         // setup music
@@ -169,20 +173,22 @@ public class Game extends Application {
         // add all to scene
         baseGroup.getChildren().addAll(sceneBG, rootGroup);
 
+        // reset game
+        reset();
+
         // start game loop
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(17), e -> run()));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-
-        // first loop
-        reset();
     }
 
     public void reset() {
-        ComponentDisplay.displayList.clear();
+        camPos.set(0,0);
+        ComponentDisplay.clear();
         Effect.clear();
         Attack.clear();
         Particle.clear();
+        LevelManager.reset();
 
         Player.core = new Core(new Position());
         for (Core core : Core.cores) {
@@ -213,10 +219,6 @@ public class Game extends Application {
         toggles();
         if (!Player.core.isAlive() && Input.getInput("restart").onInitialPress())
             reset();
-        else if (Player.core.isAlive() && Input.getInput("restart").onInitialPress()) {
-            for (Component component : Player.core.components)
-                component.damage(10000, null);
-        }
     }
 
     private void tick() {
@@ -248,7 +250,7 @@ public class Game extends Application {
             stage.setFullScreen(!stage.isFullScreen());
         }
         if (Input.getInput("pause").onInitialPress()) {
-            // paused = !paused;
+            paused = !paused;
         }
     }
 
@@ -310,7 +312,7 @@ public class Game extends Application {
         gameOverLabel.setVisible(!Player.core.isAlive());
         if (Player.core.isAlive())
             return;
-        gameOverLabel.setOpacity(0.75 + Math.sin(frame / Math.PI / 30));
+        gameOverLabel.setOpacity(0.75 + 0.25 * Math.sin(frame / Math.PI / 15));
     }
 
     private static void moveCursor(MouseEvent e) {

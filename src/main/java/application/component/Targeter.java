@@ -12,7 +12,7 @@ public class Targeter extends Support {
 
     @Override
     protected boolean action() {
-        new TargetEffect(this, range, duration, Color.color(1, 0, 0), 0.75, 1.25);
+        new TargetEffect(this, range, duration, Color.color(1, 0, 0), 1/1.15, 0.15);
         return true;
     }
 }

@@ -4,12 +4,9 @@ import application.Core;
 import application.Player;
 import application.Sound;
 import application.action.SniperBullet;
-import application.action.TurretBullet;
 import application.movement.DirCalc;
 import application.movement.Position;
 import application.sprite.StaticSprite;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class Sniper extends Weapon {
   public Sniper(Core parent) {

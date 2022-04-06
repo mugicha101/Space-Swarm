@@ -51,6 +51,10 @@ public class ComponentDisplay {
     componentDisplayGroup.setTranslateX(hMargin + (scaledWidth - width * scale) * 0.5);
     componentDisplayGroup.setTranslateY(vMargin);
   }
+  public static void clear() {
+    displayList.clear();
+    componentDisplayGroup.getChildren().clear();
+  }
 
   private final Component component;
   private final Group group;

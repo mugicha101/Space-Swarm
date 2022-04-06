@@ -22,10 +22,12 @@ public class BeaconEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        if (component instanceof Weapon weapon) {
-            weapon.damage *= damageMulti;
-        } else if (component instanceof Support support) {
-            support.potency *= potencyMulti;
+        if (component instanceof Weapon) {
+            Weapon weapon = (Weapon)component;
+            weapon.damage += weapon.initDamage * damageMulti;
+        } else if (component instanceof Support) {
+            Support support = (Support)component;
+            support.potency += potencyMulti;
         }
     }
 }

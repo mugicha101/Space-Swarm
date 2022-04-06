@@ -21,6 +21,6 @@ public class OverclockEffect extends RangeEffect {
 
     @Override
     public void apply(Component component) {
-        component.firerate *= firerateMulti;
+        component.firerate += component.initFirerate * firerateMulti;
     }
 }

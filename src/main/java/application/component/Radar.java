@@ -12,7 +12,7 @@ public class Radar extends Support {
 
     @Override
     protected boolean action() {
-        new RadarEffect(this, range, duration, Color.color(1, 0, 1), 1.2 * potency);
+        new RadarEffect(this, range, duration, Color.color(1, 0, 1), 0.2 * potency);
         return true;
     }
 }

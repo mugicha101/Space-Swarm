@@ -7,9 +7,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public abstract class Weapon extends Component {
-  private final double initDamage;
-  private final double initShotspeed;
-  private final double initSpread;
+  public final double initDamage;
+  public final double initShotspeed;
+  public final double initSpread;
   public double damage;
   public double shotspeed;
   public double spread;
@@ -28,5 +28,7 @@ public abstract class Weapon extends Component {
     shotspeed = initShotspeed;
     spread = initSpread;
     super.updateStats();
+    if (shotspeed > initShotspeed * 10)
+      shotspeed = initShotspeed * 10;
   }
 }

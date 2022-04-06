@@ -14,9 +14,11 @@ import javafx.scene.shape.Circle;
 public class SiphonBullet extends Bullet {
     public SiphonBullet(Core parentCore, Weapon parentWeapon, Position pos, double dir, Velocity sourceVelo) {
         super(parentCore, parentWeapon, pos, 5, dir, sourceVelo, 1, 1, 1, 1);
-        Circle bullet = new Circle(0, 0, radius*1.5);
-        bullet.setFill(new RadialGradient(0, 0, 0, 0, radius*1.5, false, CycleMethod.NO_CYCLE, new Stop(0.5, Color.WHITE), new Stop(0.8, Color.GRAY)));
-        group.getChildren().add(bullet);
+        Circle outer = new Circle(0, 0, 1 * radius);
+        Circle inner = new Circle(0, 0, 0.75 * radius);
+        outer.setFill(Color.color(0.65, 0.65, 0.65));
+        inner.setFill(Color.WHITE);
+        group.getChildren().addAll(outer, inner);
     }
 
     protected void hit(Component hitComponent) {
