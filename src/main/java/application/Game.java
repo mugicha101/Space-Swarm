@@ -34,12 +34,13 @@ import java.util.Random;
 
 public class Game extends Application {
     public static final Random rand = new Random();
-    public static final int borderWidth = 50;
-    public static final int topMargin = 20;
+    public static final int borderWidth = 25;
+    public static final int topMargin = 26;
+    public static final int rightMargin = 11;
     public static final int width = 800;
     public static final int height = 800;
     public static final int guiWidth = 400;
-    public static final int guiSeperation = 20;
+    public static final int guiSeperation = 0;
     public static boolean debug = false;
     public static boolean paused = false;
     public static int frame = -1;
@@ -257,14 +258,14 @@ public class Game extends Application {
     private static void screenResize() {
         double w = borderWidth * 2 + width + guiWidth + guiSeperation;
         double h = borderWidth * 2 + height;
-        double scaleVal = Math.min((stage.getWidth()) / w, (stage.getHeight() - topMargin) / h);
+        double scaleVal = Math.min((stage.getWidth() - rightMargin) / w, (stage.getHeight() - topMargin) / h);
         Scale scale = new Scale();
         scale.setPivotX(0);
         scale.setPivotY(0);
         scale.setX(scaleVal);
         scale.setY(scaleVal);
         rootGroup.getTransforms().setAll(scale);
-        rootGroup.setTranslateX((stage.getWidth() - scaleVal * w) / 2 + borderWidth * scaleVal);
+        rootGroup.setTranslateX((stage.getWidth() - scaleVal * w) / 2 + borderWidth * scaleVal - rightMargin);
         rootGroup.setTranslateY((stage.getHeight() - scaleVal * h) / 2 + borderWidth * scaleVal - topMargin);
         sceneBG.setTranslateX(0);
         sceneBG.setTranslateY(0);

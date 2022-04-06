@@ -15,7 +15,35 @@ public class ComponentDisplay {
   private static class DisplayComparator implements Comparator<ComponentDisplay> {
     private int value(ComponentDisplay cd) {
       Component o = cd.component;
-      return o.getClass().getName().hashCode();
+      if (o instanceof Turret)
+        return 0;
+      if (o instanceof Sniper)
+        return 1;
+      if (o instanceof Cannon)
+        return 2;
+      if (o instanceof Lazer)
+        return 3;
+      if (o instanceof Siphongun)
+        return 4;
+      if (o instanceof Overclocker)
+        return 10;
+      if (o instanceof Shielder)
+        return 11;
+      if (o instanceof Beacon)
+        return 12;
+      if (o instanceof Targeter)
+        return 13;
+      if (o instanceof Radar)
+        return 13;
+      if (o instanceof Energizer)
+        return 14;
+      if (o instanceof Healer)
+        return 20;
+      if (o instanceof Reviver)
+        return 21;
+      if (o instanceof Patcher)
+        return 22;
+      return -1;
     }
 
     @Override
