@@ -46,6 +46,9 @@ public class ComponentSelect {
     private static final Color supportColor = Color.color(0, 0, 1);
     private static final Color recoveryColor = Color.color(0, 1, 0);
 
+    private static final double boxWidth = Game.guiWidth / 3.2;
+    private static final double boxHeight = Game.height * 0.32;
+
     private static final Random rand = new Random();
     public static final Group selectGroup = new Group();
     private static final ArrayList<ComponentSelect> activeList = new ArrayList<>();
@@ -67,7 +70,7 @@ public class ComponentSelect {
     public static void activate() {
         clear();
         for (int i = -1; i <= 1; i++) {
-            Position pos = new Position(Game.guiWidth * 0.5 + i * Game.guiWidth * 0.32, Game.height * 0.7);
+            Position pos = new Position(Game.guiWidth * 0.5 + i * Game.guiWidth / 3.0, Game.height * 0.65);
             if (i == -1) { // weapon
                 switch(rand.nextInt(5)) {
                     case 0 -> ComponentSelect.create(Type.TURRET, pos);
@@ -101,7 +104,7 @@ public class ComponentSelect {
             case CANNON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/cannon.png", new double[] {0, 0}, 0.2), "Cannon", "Health: 120\nFirerate: 0.5\nDamage: 12\nAOE: scales with damage\nSpread: 5\nShotspeed: 10\nRange: 900", () -> new Cannon(Player.core), weaponColor);
             case SIPHONGUN -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/siphongun.png", new double[] {0, 0}, 0.2), "Siphongun", "Health: 90\nFirerate: 0.75\nDamage: 20\nSpread: 15\nShotspeed: 8\nRange: 1000\nCan be buffed by any support unit\nSupport buffs are are doubled", () -> new Siphongun(Player.core), weaponColor);
             case LAZER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/lazer.png", new double[] {0, 0}, 0.2), "Lazer", "Health: 70\nFirerate: 0.2\nDamage: 50\nshoots a lazer\nSpread: 0\nLaser Width: 20\nRange: 900\nwidth scales with shotspeed", () -> new Lazer(Player.core), weaponColor);
-            case OVERCLOCKER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/overclocker.png", new double[] {0, 0}, 0.2), "Overclocker", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the firerate of all units in range by 15%\nCannot affect other overclockers", () -> new Overclocker(Player.core), supportColor);
+            case OVERCLOCKER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/overclocker.png", new double[] {0, 0}, 0.2), "Overclocker", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the firerate of all weapons in range by 15%", () -> new Overclocker(Player.core), supportColor);
             case SHIELDER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/shielder.png", new double[] {0, 0}, 0.2), "Shielder", "Health: 200\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the armor of all units in range by 15%", () -> new Shielder(Player.core), supportColor);
             case BEACON -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/beacon.png", new double[] {0, 0}, 0.2), "Beacon", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the damage/potency of all units in range by 15%\nCannot affect other beacons", () -> new Beacon(Player.core), supportColor);
             case TARGETER -> new ComponentSelect(pos, (group) -> new StaticSprite(group, "components/targeter.png", new double[] {0, 0}, 0.2), "Targeter", "Health: 100\nFirerate: 0.2\nRange: 75\nDuration: 5s\nIncreases the shotspeed and accuracy of all weapons in range by 15%", () -> new Targeter(Player.core), supportColor);
@@ -128,8 +131,8 @@ public class ComponentSelect {
         selectGroup.getChildren().add(group);
         activeList.add(this);
 
-        Rectangle bg = new Rectangle(-60, 0, 120, 240);
-        Rectangle box = new Rectangle(-60, 0, 120, 240);
+        Rectangle bg = new Rectangle(-boxWidth*0.5, 0, boxWidth, boxHeight);
+        Rectangle box = new Rectangle(-boxWidth*0.5, 0, boxWidth, boxHeight);
         scale = new Scale();
         scale.setY(0);
         box.getTransforms().setAll(scale);

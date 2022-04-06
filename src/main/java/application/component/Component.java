@@ -101,11 +101,6 @@ public abstract class Component extends Chunkable {
       for (Effect effect : effects)
         effect.apply(this);
     }
-
-    if (firerate > initFirerate * 10)
-      firerate = initFirerate * 10;
-    if (range > initRange * 10)
-      range = initRange * 10;
   }
 
   public boolean isDeleted() {

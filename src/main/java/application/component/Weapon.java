@@ -28,7 +28,5 @@ public abstract class Weapon extends Component {
     shotspeed = initShotspeed;
     spread = initSpread;
     super.updateStats();
-    if (shotspeed > initShotspeed * 10)
-      shotspeed = initShotspeed * 10;
   }
 }

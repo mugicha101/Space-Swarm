@@ -11,8 +11,8 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 
 public class Star {
-    private static final int regionSize = 2000;
-    private static final double starDensity = 2;
+    private static final int regionSize = 4000;
+    private static final double starDensity = 1;
     public static final Group starGroup = new Group();
     private static final ArrayList<Star> stars = new ArrayList<>();
     public static void tickStars() {
@@ -32,7 +32,7 @@ public class Star {
     private final double distMulti;
     private Star() {
         distMulti = 0.1 + 0.9 * Math.pow(Math.random(), 2);
-        circle = new Circle(0, 0, distMulti * (Math.random() + 0.5));
+        circle = new Circle(0, 0, distMulti * (Math.random() * 2 + 1));
         Color color;
         double r = Math.random();
         if (r < 0.5)

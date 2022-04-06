@@ -18,9 +18,5 @@ public abstract class Support extends Component {
     potency = 1;
     duration = initDuration;
     super.updateStats();
-    if (potency > 10)
-      potency = 10;
-    if (duration > initDuration * 10)
-      duration = initDuration * 10;
   }
 }

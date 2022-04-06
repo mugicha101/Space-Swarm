@@ -2,6 +2,7 @@ package application.action;
 
 import application.component.Component;
 import application.component.Overclocker;
+import application.component.Weapon;
 import javafx.scene.paint.Color;
 
 public class OverclockEffect extends RangeEffect {
@@ -13,7 +14,7 @@ public class OverclockEffect extends RangeEffect {
 
     @Override
     protected boolean canBeAffected(Component component) {
-        return !(component instanceof Overclocker);
+        return component instanceof Weapon;
     }
 
     @Override

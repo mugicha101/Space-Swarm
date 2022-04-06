@@ -304,8 +304,8 @@ public class Game extends Application {
                 zoomMulti /= 1.1;
         } else if (y < 0) {
             zoomMulti /= 1.1;
-            if (zoomMulti < 1)
-                zoomMulti = 1;
+            if (zoomMulti < 0.5)
+                zoomMulti = 0.5;
         }
     }
 
