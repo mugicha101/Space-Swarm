@@ -24,7 +24,7 @@ public abstract class Bullet extends Attack {
   public Bullet(Core parentCore, Weapon parentWeapon, Position pos, double radius, double dir, Velocity sourceVelo, double speedMulti, double rangeMulti, double damageMulti, double spreadMulti) {
     super(parentCore, pos);
     this.dir = dir + (rand.nextDouble() * 2 - 1) * parentWeapon.spread * spreadMulti;
-    this.radius = radius;
+    this.radius = radius * Math.sqrt(parentWeapon.damage / parentWeapon.initDamage);
     speed = parentWeapon.shotspeed * speedMulti;
     range = parentWeapon.range * rangeMulti;
     damage = parentWeapon.damage * damageMulti;
